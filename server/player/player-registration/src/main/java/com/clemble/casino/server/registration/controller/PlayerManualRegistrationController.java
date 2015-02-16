@@ -12,6 +12,7 @@ import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -26,6 +27,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 public class PlayerManualRegistrationController implements PlayerManualRegistrationService, ExternalController {
@@ -51,8 +53,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
     }
 
     @Override
-    public String login(PlayerLoginRequest loginRequest) {
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
+    public String login(PlayerCredential playerCredentials) {
         // Step 1. Checking password match
         if (!credentialManager.matches(playerCredentials.getEmail(), playerCredentials.getPassword()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
@@ -62,8 +63,8 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public String httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
-        String player = login(loginRequest);
+    public String httpLogin(@Validated @RequestBody PlayerCredential playerCredentials, HttpServletResponse response) {
+        String player = login(playerCredentials);
         tokenUtils.updateResponse(player, response);
         return player;
     }
@@ -75,7 +76,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         validationService.validate(registrationRequest.getPlayerProfile());
         // Step 1.1 Checking user not already exists
         if (null != credentialManager.findPlayerByEmail(registrationRequest.getPlayerCredential().getEmail()))
-            return login(registrationRequest);
+            return login(registrationRequest.getPlayerCredential());
         // Step 2. Creating appropriate PlayerProfile
         String player = playerKeyGenerator.generate();
         // Step 3. Adding initial fields to PlayerProfile
@@ -91,7 +92,7 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         }
         validationService.validate(normalizedProfile);
         // Step 4. Registration done through separate registration service
-        register(registrationRequest, player);
+        register(registrationRequest.getPlayerCredential(), player);
         // Step 5. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
         // Step 5.1. Creating email added event
@@ -102,17 +103,14 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+    public String httpCreatePlayer(@Validated @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
         String player = createPlayer(registrationRequest);
         tokenUtils.updateResponse(player, response);
         return player;
     }
 
-    public String register(final PlayerLoginRequest loginRequest, final String player) {
-        validationService.validate(loginRequest);
-        validationService.validate(loginRequest.getPlayerCredential());
+    public String register(final PlayerCredential playerCredentials, final String player) {
         // Step 1. Create new credentials
-        PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
         credentialManager.save(player, playerCredentials.getEmail(), playerCredentials.getPassword());
         // Step 2. Generating default image redirect
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());

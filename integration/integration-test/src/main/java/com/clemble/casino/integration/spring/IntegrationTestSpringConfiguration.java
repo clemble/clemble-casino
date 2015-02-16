@@ -28,13 +28,9 @@ import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.registration.PlayerToken;
+import com.clemble.casino.registration.*;
 import com.clemble.casino.registration.service.PlayerManualRegistrationService;
 import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
-import com.clemble.casino.registration.PlayerLoginRequest;
-import com.clemble.casino.registration.PlayerRegistrationRequest;
-import com.clemble.casino.registration.PlayerSocialGrantRegistrationRequest;
-import com.clemble.casino.registration.PlayerSocialRegistrationRequest;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.schedule.spring.ScheduleSpringConfiguration;
@@ -131,7 +127,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             return new PlayerFacadeRegistrationService() {
 
                 @Override
-                public String login(PlayerLoginRequest loginRequest) {
+                public String login(PlayerCredential loginRequest) {
                     return registrationService.login(loginRequest);
                 }
 

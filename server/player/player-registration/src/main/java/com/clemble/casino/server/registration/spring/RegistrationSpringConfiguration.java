@@ -24,7 +24,6 @@ import com.clemble.casino.server.spring.common.MongoSpringConfiguration;
 import com.clemble.casino.server.spring.common.RedisSpringConfiguration;
 import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.server.spring.PlayerTokenSpringConfiguration;
-import com.clemble.casino.server.registration.controller.PlayerBaseRegistrationController;
 import com.clemble.casino.server.registration.controller.PlayerManualRegistrationController;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +34,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
@@ -91,13 +89,6 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     @Bean
     public ServerPlayerCredentialManager credentialManager(PasswordEncoder passwordEncoder, ServerPlayerCredentialRepository credentialRepository) {
         return new ServerPlayerCredentialManager(passwordEncoder, credentialRepository);
-    }
-
-    @Bean
-    public PlayerBaseRegistrationController playerBaseRegistrationController(
-        PlayerTokenUtils tokenUtils,
-        @Qualifier("playerRegistrationController") PlayerManualRegistrationService manualRegistrationService) {
-        return new PlayerBaseRegistrationController(tokenUtils, manualRegistrationService);
     }
 
     @Bean

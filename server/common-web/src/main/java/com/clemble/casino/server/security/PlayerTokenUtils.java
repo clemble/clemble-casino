@@ -2,6 +2,7 @@ package com.clemble.casino.server.security;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -32,6 +33,12 @@ public class PlayerTokenUtils {
         cookie.setDomain(host);
         cookie.setMaxAge(maxAge);
         response.addCookie(cookie);
+        // Step 3. Specifying player in response
+        try {
+            response.getOutputStream().write(player.getBytes());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void signOut(HttpServletResponse response) {

@@ -120,8 +120,7 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
 
     @Override
     public ClembleCasinoOperations login(PlayerCredential playerCredentials) {
-        PlayerLoginRequest loginRequest = new PlayerLoginRequest(playerCredentials);
-        String player = registrationService.login(loginRequest);
+        String player = registrationService.login(playerCredentials);
         return create(player, playerCredentials);
     }
 
