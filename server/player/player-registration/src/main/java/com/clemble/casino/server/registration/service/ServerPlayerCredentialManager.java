@@ -25,6 +25,7 @@ public class ServerPlayerCredentialManager {
         ServerPlayerCredential playerCredential = new ServerPlayerCredential(
             player,
             email,
+            "",
             passwordEncoder.encode(password)
         );
         // Step 2. Saving Player credentials in repository
@@ -40,6 +41,7 @@ public class ServerPlayerCredentialManager {
         ServerPlayerCredential newCredentials = new ServerPlayerCredential(
             playerCredential.getPlayer(),
             playerCredential.getEmail(),
+            playerCredential.getNickName(),
             passwordEncoder.encode(password)
         );
         // Step 3. Saving new player credentials

@@ -86,7 +86,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
     public IntegrationClembleCasinoOperations(
         final String host,
         final ObjectMapper objectMapper,
-        final PlayerToken playerIdentity,
+        final String player,
         final PlayerCredential credential,
         final PlayerProfileServiceController playerProfileService,
         final PlayerImageServiceController imageService,
@@ -110,7 +110,7 @@ public class IntegrationClembleCasinoOperations implements ClembleCasinoOperatio
         final PlayerEmailServiceController emailService,
         final PlayerTagServiceController tagServiceController
     ) {
-        this.player = playerIdentity.getPlayer();
+        this.player = player;
         this.playerSessionOperations = new IntegrationPlayerSessionService(player, sessionOperations);
         this.session = checkNotNull(playerSessionOperations.create());
         this.listenerOperations = listenerOperationsFactory.construct(player, host, objectMapper);

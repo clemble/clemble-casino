@@ -63,9 +63,8 @@ public class PlayerOperationsITest {
                 setNickName("mavarazy");
 
         PlayerCredential playerCredential = new PlayerCredential(RandomStringUtils.randomAlphabetic(10) + "@gmail.com", "23443545");
-        ClembleConsumerDetails consumerDetails = ObjectGenerator.generate(ClembleConsumerDetails.class);
 
-        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(consumerDetails, playerCredential, profile);
+        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(playerCredential, profile);
 
         ClembleCasinoOperations player = playerOperations.createPlayer(registrationRequest);
 

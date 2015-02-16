@@ -8,13 +8,10 @@ import com.clemble.casino.server.event.email.SystemEmailAddedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerImageChangedEvent;
 import com.clemble.casino.server.event.player.SystemPlayerProfileRegisteredEvent;
 import com.clemble.casino.server.registration.PlayerKeyGenerator;
-import com.clemble.casino.server.registration.ServerPlayerCredential;
-import com.clemble.casino.server.registration.security.ClembleConsumerDetailsService;
 import com.clemble.casino.server.registration.service.GravatarService;
 import com.clemble.casino.server.registration.service.ServerPlayerCredentialManager;
 import com.clemble.casino.server.security.PlayerTokenUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -22,13 +19,10 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
-import com.clemble.casino.registration.PlayerToken;
 import com.clemble.casino.registration.PlayerLoginRequest;
 import com.clemble.casino.registration.PlayerRegistrationRequest;
 import com.clemble.casino.server.ExternalController;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.clemble.casino.server.security.PlayerTokenFactory;
-import com.clemble.casino.server.registration.repository.ServerPlayerCredentialRepository;
 import com.clemble.casino.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,50 +33,43 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
 
     final private PlayerTokenUtils tokenUtils;
     final private PlayerKeyGenerator playerKeyGenerator;
-    final private PlayerTokenFactory playerTokenFactory;
     final private ServerPlayerCredentialManager credentialManager;
     final private SystemNotificationService notificationService;
     final private ClembleCasinoValidationService validationService;
-    final private ClembleConsumerDetailsService consumerDetailsService;
 
     public PlayerManualRegistrationController(
         ServerPlayerCredentialManager credentialManager,
         PlayerTokenUtils tokenUtils,
         PlayerKeyGenerator playerKeyGenerator,
-        PlayerTokenFactory playerTokenFactory,
-        ClembleConsumerDetailsService playerIdentityRepository,
         ClembleCasinoValidationService validationService,
         SystemNotificationService notificationService) {
         this.tokenUtils = checkNotNull(tokenUtils);
         this.playerKeyGenerator = checkNotNull(playerKeyGenerator);
-        this.playerTokenFactory = checkNotNull(playerTokenFactory);
         this.credentialManager = credentialManager;
-        this.consumerDetailsService = checkNotNull(playerIdentityRepository);
         this.validationService = checkNotNull(validationService);
         this.notificationService = checkNotNull(notificationService);
     }
 
     @Override
-    public PlayerToken login(PlayerLoginRequest loginRequest) {
+    public String login(PlayerLoginRequest loginRequest) {
         PlayerCredential playerCredentials = loginRequest.getPlayerCredential();
         // Step 1. Checking password match
         if (!credentialManager.matches(playerCredentials.getEmail(), playerCredentials.getPassword()))
             throw ClembleCasinoException.fromError(ClembleCasinoError.EmailOrPasswordIncorrect);
         // Step 4. Everything is fine, return Identity
-        consumerDetailsService.save(loginRequest.getConsumerDetails());
-        return playerTokenFactory.create(credentialManager.findPlayerByEmail(playerCredentials.getEmail()), loginRequest.getConsumerDetails());
+        return credentialManager.findPlayerByEmail(playerCredentials.getEmail());
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public PlayerToken httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
-        PlayerToken token = login(loginRequest);
-        tokenUtils.updateResponse(token.getPlayer(), response);
-        return token;
+    public String httpLogin(@RequestBody PlayerLoginRequest loginRequest, HttpServletResponse response) {
+        String player = login(loginRequest);
+        tokenUtils.updateResponse(player, response);
+        return player;
     }
 
     @Override
-    public PlayerToken createPlayer(final PlayerRegistrationRequest registrationRequest) {
+    public String createPlayer(final PlayerRegistrationRequest registrationRequest) {
         // Step 1. Validating input data prior to any actions
         validationService.validate(registrationRequest.getPlayerCredential());
         validationService.validate(registrationRequest.getPlayerProfile());
@@ -104,24 +91,24 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         }
         validationService.validate(normalizedProfile);
         // Step 4. Registration done through separate registration service
-        PlayerToken token = register(registrationRequest, player);
+        register(registrationRequest, player);
         // Step 5. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
         // Step 5.1. Creating email added event
         notificationService.send(new SystemEmailAddedEvent(player, registrationRequest.getPlayerCredential().getEmail(), false));
         // Step 6. All done returning response
-        return token;
+        return player;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public PlayerToken httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
-        PlayerToken token = createPlayer(registrationRequest);
-        tokenUtils.updateResponse(createPlayer(registrationRequest).getPlayer(), response);
-        return token;
+    public String httpCreatePlayer(@RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+        String player = createPlayer(registrationRequest);
+        tokenUtils.updateResponse(player, response);
+        return player;
     }
 
-    public PlayerToken register(final PlayerLoginRequest loginRequest, final String player) {
+    public String register(final PlayerLoginRequest loginRequest, final String player) {
         validationService.validate(loginRequest);
         validationService.validate(loginRequest.getPlayerCredential());
         // Step 1. Create new credentials
@@ -132,10 +119,8 @@ public class PlayerManualRegistrationController implements PlayerManualRegistrat
         notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));
         // Step 2.1 Specifying player type
         // TODO move to registration listener playerProfile.setType(PlayerType.free);
-        // Step 3. Create new token
-        PlayerToken playerToken = playerTokenFactory.create(player, loginRequest.getConsumerDetails());
         // Step 4. Returning generated player token
-        return playerToken;
+        return player;
     }
 
 }

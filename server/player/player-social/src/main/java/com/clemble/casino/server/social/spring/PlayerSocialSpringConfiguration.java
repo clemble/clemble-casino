@@ -153,15 +153,11 @@ public class PlayerSocialSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public PlayerSocialRegistrationController playerSocialRegistrationController(
-        final PlayerTokenFactory playerTokenFactory,
         final SocialConnectionDataAdapter registrationService,
-        final ClembleCasinoValidationService validationService,
-        final SystemNotificationService notificationService) {
+        final ClembleCasinoValidationService validationService) {
         return new PlayerSocialRegistrationController(
-            playerTokenFactory,
             registrationService,
-            validationService,
-            notificationService);
+            validationService);
     }
 
     @Bean

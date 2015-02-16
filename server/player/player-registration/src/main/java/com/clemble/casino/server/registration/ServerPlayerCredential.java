@@ -1,6 +1,8 @@
 package com.clemble.casino.server.registration;
 
+import com.clemble.casino.player.EmailAware;
 import com.clemble.casino.player.PlayerAware;
+import com.clemble.casino.player.PlayerNickNameAware;
 import com.clemble.casino.registration.PlayerCredential;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,23 +13,34 @@ import java.io.Serializable;
 /**
  * Created by mavarazy on 11/1/14.
  */
-public class ServerPlayerCredential implements PlayerAware, Serializable {
+public class ServerPlayerCredential implements PlayerAware, PlayerNickNameAware, EmailAware, Serializable {
 
     @Id
     final private String player;
     final private String email;
+    final private String nickName;
     final private String hash;
 
     @JsonCreator
-    public ServerPlayerCredential(@JsonProperty("player") String player, @JsonProperty("email") String email, @JsonProperty("hash") String hash) {
+    public ServerPlayerCredential(
+        @JsonProperty("player") String player,
+        @JsonProperty("email") String email,
+        @JsonProperty("nickName") String nickName,
+        @JsonProperty("hash") String hash) {
         this.player = player;
         this.email = email;
+        this.nickName = nickName;
         this.hash = hash;
     }
 
     @Override
     public String getPlayer() {
         return player;
+    }
+
+    @Override
+    public String getNickName() {
+        return nickName;
     }
 
     public String getHash() {

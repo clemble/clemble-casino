@@ -22,8 +22,6 @@ import static com.clemble.casino.registration.RegistrationWebMapping.*;
 @RestController
 public class PlayerBaseRegistrationController implements PlayerBaseRegistrationService {
 
-    final private ClembleConsumerDetails DEFAULT_DETAILS = new ClembleConsumerDetails("DEFAULT", "web", null, null,null);
-
     final private PlayerTokenUtils tokenUtils;
     final private PlayerManualRegistrationService manualRegistrationService;
 
@@ -33,28 +31,28 @@ public class PlayerBaseRegistrationController implements PlayerBaseRegistrationS
     }
 
     @Override
-    public PlayerToken login(PlayerCredential playerCredentials) {
+    public String login(PlayerCredential playerCredentials) {
         // Step 1. Propagating request
-        return manualRegistrationService.login(new PlayerLoginRequest(DEFAULT_DETAILS, playerCredentials));
+        return manualRegistrationService.login(new PlayerLoginRequest(playerCredentials));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_LOGIN, produces = WebMapping.PRODUCES)
-    public PlayerToken httpLogin(@RequestBody PlayerCredential credentials, HttpServletResponse response) {
-        PlayerToken token = login(credentials);
-        tokenUtils.updateResponse(token.getPlayer(), response);
-        return token;
+    public String httpLogin(@RequestBody PlayerCredential credentials, HttpServletResponse response) {
+        String player = login(credentials);
+        tokenUtils.updateResponse(player, response);
+        return player;
     }
 
     @Override
-    public PlayerToken register(PlayerBaseRegistrationRequest registrationRequest) {
-        return manualRegistrationService.createPlayer(new PlayerRegistrationRequest(DEFAULT_DETAILS, registrationRequest.getPlayerCredential(), registrationRequest.getPlayerProfile()));
+    public String register(PlayerBaseRegistrationRequest registrationRequest) {
+        return manualRegistrationService.createPlayer(new PlayerRegistrationRequest(registrationRequest.getPlayerCredential(), registrationRequest.getPlayerProfile()));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_BASIC_PROFILE, produces = WebMapping.PRODUCES)
-    public PlayerToken httpRegister(@RequestBody PlayerBaseRegistrationRequest registrationRequest, HttpServletResponse response) {
-        PlayerToken token = register(registrationRequest);
-        tokenUtils.updateResponse(token.getPlayer(), response);
-        return token;
+    public String httpRegister(@RequestBody PlayerBaseRegistrationRequest registrationRequest, HttpServletResponse response) {
+        String player = register(registrationRequest);
+        tokenUtils.updateResponse(player, response);
+        return player;
     }
 
 }

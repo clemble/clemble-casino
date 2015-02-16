@@ -32,14 +32,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.repository.support.MongoRepositoryFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import scala.beans.BeanDescription;
-
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -55,7 +56,8 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ServerPlayerCredentialRepository playerCredentialRepository(MongoRepositoryFactory mongoRepositoryFactory) {
+    public ServerPlayerCredentialRepository playerCredentialRepository(MongoTemplate template, MongoRepositoryFactory mongoRepositoryFactory) {
+        template.indexOps(PlayerCredential.class).ensureIndex(new Index().on("email", Sort.Direction.ASC).unique(Index.Duplicates.DROP));
         return mongoRepositoryFactory.getRepository(ServerPlayerCredentialRepository.class);
     }
 
@@ -78,8 +80,12 @@ public class RegistrationSpringConfiguration implements SpringConfiguration {
         ClembleCasinoValidationService clembleValidationService,
         PlayerTokenFactory playerTokenFactory,
         SystemNotificationService systemNotificationService) throws NoSuchAlgorithmException {
-        return new PlayerManualRegistrationController(credentialManager, tokenUtils, playerKeyGenerator, playerTokenFactory,
-                clembleConsumerDetailsService, clembleValidationService, systemNotificationService);
+        return new PlayerManualRegistrationController(
+            credentialManager,
+            tokenUtils,
+            playerKeyGenerator,
+            clembleValidationService,
+            systemNotificationService);
     }
 
     @Bean

@@ -36,12 +36,12 @@ public class PlayerCredentialsTest {
             credential,
             profile);
         // Step 2. Processing RegistrationController
-        PlayerToken token = registrationController.register(registrationRequest);
+        String createdPlayer = registrationController.register(registrationRequest);
         // Step 3. Checking password was not saved as plain text
-        Assert.assertNotEquals(credentialRepository.findOne(token.getPlayer()), credential.getPassword());
+        Assert.assertNotEquals(credentialRepository.findOne(createdPlayer), credential.getPassword());
         // Step 4. Checking can login with Credentials
-        PlayerToken loginToken = registrationController.login(credential);
+        String logInPlayer = registrationController.login(credential);
         // Step 5. Checking we can login with old credentials and player will be same
-        Assert.assertEquals(loginToken.getPlayer(), token.getPlayer());
+        Assert.assertEquals(logInPlayer, createdPlayer);
     }
 }

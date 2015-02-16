@@ -1,5 +1,6 @@
 package com.clemble.casino.server.email;
 
+import com.clemble.casino.player.EmailAware;
 import com.clemble.casino.player.PlayerAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +9,7 @@ import org.springframework.data.annotation.Id;
 /**
  * Created by mavarazy on 12/6/14.
  */
-public class PlayerEmail implements PlayerAware {
+public class PlayerEmail implements PlayerAware, EmailAware {
 
     @Id
     final private String player;
@@ -27,6 +28,7 @@ public class PlayerEmail implements PlayerAware {
         return player;
     }
 
+    @Override
     public String getEmail() {
         return email;
     }

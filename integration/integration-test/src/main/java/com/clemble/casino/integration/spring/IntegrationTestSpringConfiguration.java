@@ -131,22 +131,22 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             return new PlayerFacadeRegistrationService() {
 
                 @Override
-                public PlayerToken login(PlayerLoginRequest loginRequest) {
+                public String login(PlayerLoginRequest loginRequest) {
                     return registrationService.login(loginRequest);
                 }
 
                 @Override
-                public PlayerToken createPlayer(PlayerRegistrationRequest registrationRequest) {
+                public String createPlayer(PlayerRegistrationRequest registrationRequest) {
                     return registrationService.createPlayer(registrationRequest);
                 }
 
                 @Override
-                public PlayerToken createSocialPlayer(PlayerSocialRegistrationRequest socialRegistrationRequest) {
+                public String createSocialPlayer(PlayerSocialRegistrationRequest socialRegistrationRequest) {
                     return socialRegistrationService.createSocialPlayer(socialRegistrationRequest);
                 }
 
                 @Override
-                public PlayerToken createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
+                public String createSocialGrantPlayer(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
                     return socialRegistrationService.createSocialGrantPlayer(grantRegistrationRequest);
                 }
 
