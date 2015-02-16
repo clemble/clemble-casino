@@ -84,9 +84,9 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         PlayerProfile normalizedProfile = registrationRequest.getPlayerProfile();
         normalizedProfile.setPlayer(player);
         if (credentialManager.existsByNickname(normalizedProfile.getNickName()))
-            throw ClembleCasinoException.fromError(ClembleCasinoError.NickAlreadyOccupied);
+            throw ClembleCasinoException.fromError(ClembleCasinoError.NickOccupied);
         // Step 4. Registration done through separate registration service
-        register(registrationRequest.getPlayerCredential(), player);
+        register(registrationRequest.getPlayerCredential(), player, normalizedProfile.getNickName());
         // Step 5. Notifying system of new user
         notificationService.send(new SystemPlayerProfileRegisteredEvent(player, normalizedProfile));
         // Step 5.1. Creating email added event
@@ -103,9 +103,9 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
         return player;
     }
 
-    public String register(final PlayerCredential playerCredentials, final String player) {
+    public String register(final PlayerCredential playerCredentials, final String player, final String nickName) {
         // Step 1. Create new credentials
-        credentialManager.save(player, playerCredentials.getEmail(), playerCredentials.getPassword());
+        credentialManager.save(player, playerCredentials.getEmail(), nickName, playerCredentials.getPassword());
         // Step 2. Generating default image redirect
         String imageRedirect = GravatarService.toRedirect(playerCredentials.getEmail());
         notificationService.send(new SystemPlayerImageChangedEvent(player, imageRedirect, imageRedirect + "?s=48"));

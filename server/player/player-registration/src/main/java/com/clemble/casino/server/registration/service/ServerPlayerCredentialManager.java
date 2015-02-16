@@ -20,12 +20,12 @@ public class ServerPlayerCredentialManager {
         this.credentialRepository = credentialRepository;
     }
 
-    public ServerPlayerCredential save(String player, String email, String password) {
+    public ServerPlayerCredential save(String player, String email, String nickName, String password) {
         // Step 1. Generating Server player credentials
         ServerPlayerCredential playerCredential = new ServerPlayerCredential(
             player,
             email,
-            "",
+            nickName,
             passwordEncoder.encode(password)
         );
         // Step 2. Saving Player credentials in repository
@@ -52,7 +52,7 @@ public class ServerPlayerCredentialManager {
         // Step 1. Looking up player credentials
         ServerPlayerCredential playerCredential = credentialRepository.findByEmailOrNickName(emailOrNickName, emailOrNickName);
         // Step 2. Checking password matches
-        if (passwordEncoder.matches(password, playerCredential.getHash())) {
+        if (playerCredential != null && passwordEncoder.matches(password, playerCredential.getHash())) {
             // Case 1. Matches return player
             return playerCredential.getPlayer();
         } else {
