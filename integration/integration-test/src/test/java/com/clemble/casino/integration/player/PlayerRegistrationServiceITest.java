@@ -17,7 +17,6 @@ import org.junit.runner.RunWith;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.test.annotation.IfProfileValue;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -75,7 +74,7 @@ public class PlayerRegistrationServiceITest {
         ClembleCasinoOperations A = playerScenarios.register(credential, playerProfile);
 
         // Step 3. Creating CasinoOperations by just login
-        ClembleCasinoOperations nickA = playerScenarios.login(new PlayerLoginRequest(playerProfile.getNickName(), credential.getPassword()));
+        ClembleCasinoOperations nickA = playerScenarios.login(new PlayerLoginRequest(null, playerProfile.getNickName(), credential.getPassword()));
         // Step 4. Checking they are the same
         assertEquals(A.getPlayer(), nickA.getPlayer());
         assertEquals(A.profileOperations().myProfile(), nickA.profileOperations().myProfile());

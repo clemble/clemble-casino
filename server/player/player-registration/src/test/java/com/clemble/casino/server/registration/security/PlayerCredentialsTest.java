@@ -32,16 +32,14 @@ public class PlayerCredentialsTest {
         // Step 1. Creating random data
         PlayerCredential credential = new PlayerCredential("me@me.me", "1234567");
         PlayerProfile profile = new PlayerProfile();
-        PlayerRegistrationRequest registrationRequest = new PlayerRegistrationRequest(
-            credential,
-            profile);
+        PlayerRegistrationRequest registrationRequest = PlayerRegistrationRequest.create(credential, profile);
         // Step 2. Processing RegistrationController
-        String createdPlayer = registrationController.register(registrationRequest);
+        String createdPlayer = registrationController.register(registrationRequest).getPlayer();
         // Step 3. Checking password was not saved as plain text
         Assert.assertNotEquals(credentialRepository.findOne(createdPlayer), credential.getPassword());
         // Step 4. Checking can login with Credentials
-        String logInPlayer = registrationController.login(new PlayerLoginRequest("me@me.me", "1234567"));
+        PlayerLoginRequest logInPlayer = registrationController.login(new PlayerLoginRequest(null, "me@me.me", "1234567"));
         // Step 5. Checking we can login with old credentials and player will be same
-        Assert.assertEquals(logInPlayer, createdPlayer);
+        Assert.assertEquals(logInPlayer.getPlayer(), createdPlayer);
     }
 }

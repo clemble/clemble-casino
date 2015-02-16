@@ -71,7 +71,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest playerRegistrationRequest) {
-        return register(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+        return register(playerRegistrationRequest.toCredentials(), playerRegistrationRequest.toProfileWithPlayer(null));
     }
 
     @Override

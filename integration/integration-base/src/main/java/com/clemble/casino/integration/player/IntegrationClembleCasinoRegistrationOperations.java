@@ -120,15 +120,15 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
 
     @Override
     public ClembleCasinoOperations login(PlayerLoginRequest playerCredentials) {
-        String player = registrationController.httpLogin(playerCredentials, new MockHttpServletResponse());
-        return create(player);
+        PlayerLoginRequest response = registrationController.httpLogin(playerCredentials, new MockHttpServletResponse());
+        return create(response.getPlayer());
     }
 
     @Override
     public ClembleCasinoOperations register(PlayerCredential playerCredential, PlayerProfile playerProfile) {
-        PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(playerCredential, playerProfile);
-        String player = registrationController.httpRegister(loginRequest, new MockHttpServletResponse());
-        return create(player);
+        PlayerRegistrationRequest loginRequest = PlayerRegistrationRequest.create(playerCredential, playerProfile);
+        PlayerRegistrationRequest response = registrationController.httpRegister(loginRequest, new MockHttpServletResponse());
+        return create(response.getPlayer());
     }
 
     @Override

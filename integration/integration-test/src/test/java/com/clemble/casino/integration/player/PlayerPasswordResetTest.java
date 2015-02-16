@@ -76,7 +76,7 @@ public class PlayerPasswordResetTest {
         A.passwordResetService().reset(passwordResetRequest);
         A.signOut();
         // Step 6. Checking login with new password works
-        ClembleCasinoOperations A1 = playerScenarios.login(new PlayerLoginRequest(emailA, newPassword));
+        ClembleCasinoOperations A1 = playerScenarios.login(new PlayerLoginRequest(null, emailA, newPassword));
         Assert.assertNotNull(A1);
         Assert.assertEquals(A1.getPlayer(), player);
     }
