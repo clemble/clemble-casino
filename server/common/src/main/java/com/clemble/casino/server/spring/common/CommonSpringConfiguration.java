@@ -26,8 +26,8 @@ public class CommonSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public ClembleCasinoValidationService clembleValidationService() {
-        return new ClembleCasinoValidationService(Validation.buildDefaultValidatorFactory());
+    public ClembleCasinoValidationService clembleValidationService(ValidatorFactory validatorFactory) {
+        return new ClembleCasinoValidationService(validatorFactory);
     }
 
     @Bean
@@ -42,11 +42,12 @@ public class CommonSpringConfiguration implements SpringConfiguration {
         return factoryBean;
     }
 
-//    @Bean
-//    public MethodValidationPostProcessor methodValidationPostProcessor() {
-//        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
-//        methodValidationPostProcessor.setValidatorFactory(Validation.buildDefaultValidatorFactory());
-//        return methodValidationPostProcessor;
-//    }
+    @Bean
+    public MethodValidationPostProcessor methodValidationPostProcessor(ValidatorFactory validatorFactory) {
+        MethodValidationPostProcessor methodValidationPostProcessor = new MethodValidationPostProcessor();
+        methodValidationPostProcessor.setValidatorFactory(validatorFactory);
+        methodValidationPostProcessor.setProxyTargetClass(true);
+        return methodValidationPostProcessor;
+    }
 
 }

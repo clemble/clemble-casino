@@ -6,6 +6,7 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.registration.service.FacadeRegistrationService;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -28,10 +30,11 @@ public class PlayerSignOutITest {
     @Autowired
     public PlayerScenarios playerScenarios;
 
-    @Autowired
+    @Autowired(required = false)
     public FacadeRegistrationService facadeRegistrationService;
 
     @Test
+    @IfProfileValue(name = SpringConfiguration.INTEGRATION_TEST)
     public void testSignOut() {
         if (!(facadeRegistrationService instanceof AndroidFacadeRegistrationService))
             return;

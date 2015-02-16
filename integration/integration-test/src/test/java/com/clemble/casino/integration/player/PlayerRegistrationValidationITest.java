@@ -1,11 +1,13 @@
 package com.clemble.casino.integration.player;
 
 import com.clemble.casino.integration.ClembleIntegrationTest;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.error.ClembleCasinoError;
@@ -17,6 +19,7 @@ import com.clemble.test.random.ObjectGenerator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ClembleIntegrationTest
+@IfProfileValue(name = SpringConfiguration.INTEGRATION_TEST)
 public class PlayerRegistrationValidationITest {
 
     @Autowired

@@ -41,8 +41,13 @@ public class PlayerOperationsITest {
 
     @Test
     public void createPlayerUsingProfileTest() {
-        PlayerProfile profile = new PlayerProfile().setFirstName("Anton").setLastName("Oparin").setGender(PlayerGender.M)
-                .setNickName("mavarazy");
+        String nickName = RandomStringUtils.randomAlphabetic(9);
+
+        PlayerProfile profile = new PlayerProfile().
+            setFirstName("Anton").
+            setLastName("Oparin").
+            setGender(PlayerGender.M).
+            setNickName(nickName);
 
         ClembleCasinoOperations player = playerOperations.createPlayer(profile);
 
@@ -51,16 +56,18 @@ public class PlayerOperationsITest {
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);
-        assertEquals(playerProfile.getNickName(), "mavarazy");
+        assertEquals(playerProfile.getNickName(), nickName);
     }
 
     @Test
     public void createPlayerUsingRegistrationRequest() {
+        String nickName = RandomStringUtils.randomAlphabetic(9);
+
         PlayerProfile profile = new PlayerProfile().
                 setFirstName("Anton").
                 setLastName("Oparin").
                 setGender(PlayerGender.M).
-                setNickName("mavarazy");
+                setNickName(nickName);
 
         PlayerCredential playerCredential = new PlayerCredential(RandomStringUtils.randomAlphabetic(10) + "@gmail.com", "23443545");
 
@@ -73,7 +80,7 @@ public class PlayerOperationsITest {
         assertEquals(playerProfile.getFirstName(), "Anton");
         assertEquals(playerProfile.getLastName(), "Oparin");
         assertEquals(playerProfile.getGender(), PlayerGender.M);
-        assertEquals(playerProfile.getNickName(), "mavarazy");
+        assertEquals(playerProfile.getNickName(), nickName);
 
         try {
             System.out.println(new ObjectMapper().writeValueAsString(registrationRequest));

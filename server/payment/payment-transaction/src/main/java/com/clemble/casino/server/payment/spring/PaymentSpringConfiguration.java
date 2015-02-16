@@ -1,5 +1,6 @@
 package com.clemble.casino.server.payment.spring;
 
+import com.clemble.casino.error.ClembleCasinoValidationService;
 import com.clemble.casino.server.payment.account.BasicServerPlayerAccountService;
 import com.clemble.casino.server.payment.listener.SystemPaymentFreezeRequestEventListener;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
@@ -63,8 +64,9 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemPaymentTransactionRequestEventListener paymentTransactionRequestEventListener(
             ServerAccountService accountTemplate,
-            SystemNotificationServiceListener notificationServiceListener) {
-        SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(accountTemplate);
+            SystemNotificationServiceListener notificationServiceListener,
+            ClembleCasinoValidationService validationService) {
+        SystemPaymentTransactionRequestEventListener eventListener = new SystemPaymentTransactionRequestEventListener(accountTemplate, validationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
@@ -72,8 +74,9 @@ public class PaymentSpringConfiguration implements SpringConfiguration {
     @Bean
     public SystemPaymentFreezeRequestEventListener systemPaymentFreezeRequestEventListener(
         ServerAccountService accountTemplate,
-        SystemNotificationServiceListener notificationServiceListener) {
-        SystemPaymentFreezeRequestEventListener eventListener = new SystemPaymentFreezeRequestEventListener(accountTemplate);
+        SystemNotificationServiceListener notificationServiceListener,
+        ClembleCasinoValidationService validationService) {
+        SystemPaymentFreezeRequestEventListener eventListener = new SystemPaymentFreezeRequestEventListener(accountTemplate, validationService);
         notificationServiceListener.subscribe(eventListener);
         return eventListener;
     }
