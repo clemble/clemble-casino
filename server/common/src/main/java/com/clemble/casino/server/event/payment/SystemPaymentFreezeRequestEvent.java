@@ -4,6 +4,8 @@ import com.clemble.casino.payment.PendingTransaction;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
+
 /**
  * Created by mavarazy on 16/10/14.
  */
@@ -20,6 +22,7 @@ public class SystemPaymentFreezeRequestEvent implements SystemPaymentEvent {
         this.transaction = transaction;
     }
 
+    @Valid
     public PendingTransaction getTransaction() {
         return transaction;
     }

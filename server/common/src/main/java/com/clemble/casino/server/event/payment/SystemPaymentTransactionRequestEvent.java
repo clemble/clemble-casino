@@ -5,6 +5,8 @@ import com.clemble.casino.server.event.SystemEvent;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.Valid;
+
 /**
  * Created by mavarazy on 7/5/14.
  */
@@ -19,6 +21,7 @@ public class SystemPaymentTransactionRequestEvent implements SystemPaymentEvent 
         this.transaction = transaction;
     }
 
+    @Valid
     public PaymentTransaction getTransaction() {
         return transaction;
     }

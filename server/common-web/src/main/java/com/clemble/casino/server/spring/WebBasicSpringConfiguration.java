@@ -13,10 +13,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 
 /**
  * Created by mavarazy on 8/9/14.
@@ -27,6 +32,9 @@ public class WebBasicSpringConfiguration extends WebMvcConfigurationSupport impl
 
     @Autowired
     public ObjectMapper objectMapper;
+
+    @Autowired
+    public Validator validator;
 
     @Autowired
     public MappingJackson2HttpMessageConverter jacksonHttpMessageConverter;
@@ -44,6 +52,11 @@ public class WebBasicSpringConfiguration extends WebMvcConfigurationSupport impl
     @Bean
     public HandlerExceptionResolver handlerExceptionResolver() {
         return new ClembleCasinoHandlerExceptionResolver(objectMapper);
+    }
+
+    @Override
+    protected Validator getValidator() {
+        return validator;
     }
 
 }

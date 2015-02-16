@@ -5,14 +5,18 @@ import static org.junit.Assert.assertEquals;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.registration.PlayerLoginRequest;
+import com.clemble.casino.server.spring.common.SpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
+import org.junit.Assume;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
+import org.junit.runner.RunWith;;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -21,9 +25,14 @@ import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.PlayerCredential;
 import com.clemble.test.random.ObjectGenerator;
 
+import java.util.Arrays;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ClembleIntegrationTest
 public class PlayerRegistrationServiceITest {
+
+    @Autowired
+    public Environment env;
 
     @Autowired
     public PlayerScenarios playerScenarios;
@@ -41,7 +50,7 @@ public class PlayerRegistrationServiceITest {
                 .setBirthDate(new DateTime(0))
                 .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations A = playerScenarios.createPlayer(credential, playerProfile);
+        ClembleCasinoOperations A = playerScenarios.register(credential, playerProfile);
 
         // Step 3. Creating CasinoOperations by just login
         ClembleCasinoOperations emailA = playerScenarios.login(PlayerLoginRequest.create(credential));
@@ -62,7 +71,7 @@ public class PlayerRegistrationServiceITest {
                 .setBirthDate(new DateTime(0))
                 .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations A = playerScenarios.createPlayer(credential, playerProfile);
+        ClembleCasinoOperations A = playerScenarios.register(credential, playerProfile);
 
         // Step 3. Creating CasinoOperations by just login
         ClembleCasinoOperations nickA = playerScenarios.login(new PlayerLoginRequest(playerProfile.getNickName(), credential.getPassword()));
@@ -74,6 +83,7 @@ public class PlayerRegistrationServiceITest {
     }
 
     @Test
+    @IfProfileValue(name = SpringConfiguration.INTEGRATION_TEST)
     public void createWithoutNick(){
         String nick = RandomStringUtils.randomAlphabetic(10);
         // Step 1. Generating player credential & profile
@@ -86,13 +96,16 @@ public class PlayerRegistrationServiceITest {
                 .setSocialConnections(null);
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.NickMustNotBeNull));
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
+        ClembleCasinoOperations origA = playerScenarios.register(credential, playerProfile);
         // Step 3. Checking nick matches
         assertEquals(nick, origA.profileOperations().myProfile().getNickName());
     }
 
     @Test
+    @IfProfileValue(name = SpringConfiguration.INTEGRATION_TEST)
     public void createWithTooShortNick(){
+        Assume.assumeTrue(Arrays.asList(env.getActiveProfiles()).contains(SpringConfiguration.INTEGRATION_TEST));
+
         String nick = RandomStringUtils.randomAlphabetic(10);
         // Step 1. Generating player credential & profile
         PlayerCredential credential = new PlayerCredential(
@@ -102,15 +115,16 @@ public class PlayerRegistrationServiceITest {
                 .setNickName(null)
                 .setBirthDate(new DateTime(0))
                 .setSocialConnections(null)
-                .setNickName("nic");
+                .setNickName(RandomStringUtils.randomAlphabetic(3));
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.NickTooShort));
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
+        ClembleCasinoOperations origA = playerScenarios.register(credential, playerProfile);
         // Step 3. Checking nick matches
         assertEquals(nick, origA.profileOperations().myProfile().getNickName());
     }
 
     @Test
+    @IfProfileValue(name = SpringConfiguration.INTEGRATION_TEST)
     public void createWithTooLongNick(){
         String nick = RandomStringUtils.randomAlphabetic(10);
         // Step 1. Generating player credential & profile
@@ -124,7 +138,7 @@ public class PlayerRegistrationServiceITest {
                 .setNickName(RandomStringUtils.random(128));
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.NickTooLong));
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations origA = playerScenarios.createPlayer(credential, playerProfile);
+        ClembleCasinoOperations origA = playerScenarios.register(credential, playerProfile);
         // Step 3. Checking nick matches
         assertEquals(nick, origA.profileOperations().myProfile().getNickName());
     }
@@ -139,7 +153,7 @@ public class PlayerRegistrationServiceITest {
                 .setBirthDate(new DateTime(0))
                 .setSocialConnections(null);
         // Step 2. Creating CasinoOperations with this credentials and Profile
-        ClembleCasinoOperations A = playerScenarios.createPlayer(Acredential, AplayerProfile);
+        ClembleCasinoOperations A = playerScenarios.register(Acredential, AplayerProfile);
 
         // Step 3. Generating player credential & profile
         PlayerCredential Bcredential = new PlayerCredential(
@@ -147,10 +161,11 @@ public class PlayerRegistrationServiceITest {
             RandomStringUtils.random(10));
         PlayerProfile BplayerProfile = ObjectGenerator.generate(PlayerProfile.class)
                 .setBirthDate(new DateTime(0))
-                .setSocialConnections(null);
+                .setSocialConnections(null)
+                .setNickName(AplayerProfile.getNickName());
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.NickOccupied));
         // Step 4. Creating CasinoOperations with this credentials and Profile
-        playerScenarios.createPlayer(Bcredential, BplayerProfile);
-
+        playerScenarios.register(Bcredential, BplayerProfile);
     }
+
 }

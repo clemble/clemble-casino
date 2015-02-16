@@ -26,6 +26,7 @@ import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.WebMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestController
 public class PlayerRegistrationController implements PlayerRegistrationService, ExternalController {
@@ -59,7 +60,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_LOGIN, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.OK)
-    public String httpLogin(@Validated @RequestBody PlayerLoginRequest playerCredentials, HttpServletResponse response) {
+    public String httpLogin(@Valid @RequestBody PlayerLoginRequest playerCredentials, HttpServletResponse response) {
         String player = login(playerCredentials);
         tokenUtils.updateResponse(player, response);
         return player;
@@ -97,7 +98,7 @@ public class PlayerRegistrationController implements PlayerRegistrationService, 
 
     @RequestMapping(method = RequestMethod.POST, value = REGISTRATION_PROFILE, produces = WebMapping.PRODUCES)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String httpRegister(@Validated @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
+    public String httpRegister(@Valid @RequestBody final PlayerRegistrationRequest registrationRequest, HttpServletResponse response) {
         String player = register(registrationRequest);
         tokenUtils.updateResponse(player, response);
         return player;

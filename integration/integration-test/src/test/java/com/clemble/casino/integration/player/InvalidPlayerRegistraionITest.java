@@ -1,7 +1,5 @@
 package com.clemble.casino.integration.player;
 
-import java.util.Date;
-
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
@@ -11,13 +9,10 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.social.connect.ConnectionKey;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.player.PlayerGender;
 import com.clemble.casino.player.PlayerProfile;
@@ -47,7 +42,7 @@ public class InvalidPlayerRegistraionITest {
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.ProfileSocialMustBeEmpty));
 
-        playerScenarios.createPlayer(playerCredential, playerProfile);
+        playerScenarios.register(playerCredential, playerProfile);
     }
 
 }

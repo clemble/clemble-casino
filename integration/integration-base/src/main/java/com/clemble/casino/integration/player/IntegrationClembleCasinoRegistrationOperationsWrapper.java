@@ -34,22 +34,22 @@ public class IntegrationClembleCasinoRegistrationOperationsWrapper extends Abstr
     }
 
     @Override
-    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
-        ClembleCasinoOperations casinoOperations = delegate.get().createPlayer(playerCredential, playerProfile);
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, PlayerProfile playerProfile) {
+        ClembleCasinoOperations casinoOperations = delegate.get().register(playerCredential, playerProfile);
         initializedOperations.add(casinoOperations);
         return casinoOperations;
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
-        ClembleCasinoOperations casinoOperations = delegate.get().createSocialPlayer(playerCredential, socialConnectionData);
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
+        ClembleCasinoOperations casinoOperations = delegate.get().register(playerCredential, socialConnectionData);
         initializedOperations.add(casinoOperations);
         return casinoOperations;
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
-        ClembleCasinoOperations casinoOperations = delegate.get().createSocialPlayer(playerCredential, accessGrant);
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        ClembleCasinoOperations casinoOperations = delegate.get().register(playerCredential, accessGrant);
         initializedOperations.add(casinoOperations);
         return casinoOperations;
     }

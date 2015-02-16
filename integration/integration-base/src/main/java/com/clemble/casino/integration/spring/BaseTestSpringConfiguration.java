@@ -16,6 +16,7 @@ import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperations;
 import com.clemble.casino.integration.player.IntegrationClembleCasinoRegistrationOperationsWrapper;
 import com.clemble.casino.registration.service.FacadeRegistrationService;
+import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerConnectionServiceController;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
@@ -32,6 +33,7 @@ import com.clemble.casino.server.presence.controller.PlayerSessionServiceControl
 import com.clemble.casino.server.profile.controller.PlayerImageServiceController;
 import com.clemble.casino.server.profile.controller.PlayerProfileServiceController;
 import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
+import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import com.clemble.server.tag.controller.PlayerTagServiceController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -136,7 +138,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
             @Value("${clemble.host}") String host,
             ObjectMapper objectMapper,
             EventListenerOperationsFactory listenerOperations,
-            FacadeRegistrationService registrationService,
+            PlayerRegistrationController registrationController,
+            PlayerSocialRegistrationService socialRegistrationController,
             PlayerProfileServiceController profileOperations,
             PlayerImageServiceController imageService,
             @Qualifier("playerConnectionController") PlayerConnectionServiceController connectionService,
@@ -161,7 +164,8 @@ public class BaseTestSpringConfiguration implements TestSpringConfiguration {
                 host,
                 objectMapper,
                 listenerOperations,
-                registrationService,
+                registrationController,
+                socialRegistrationController,
                 profileOperations,
                 imageService,
                 connectionService,

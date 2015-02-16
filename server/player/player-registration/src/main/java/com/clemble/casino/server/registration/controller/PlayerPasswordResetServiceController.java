@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import static com.clemble.casino.registration.RegistrationWebMapping.*;
 
 /**
@@ -34,7 +36,7 @@ public class PlayerPasswordResetServiceController implements PlayerPasswordReset
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = RESTORE_PASSWORD, produces = WebMapping.PRODUCES)
-    public boolean restore(@RequestBody PlayerPasswordRestoreRequest restoreRequest) {
+    public boolean restore(@Valid @RequestBody PlayerPasswordRestoreRequest restoreRequest) {
         // Step 1. Looking up player credentials
         String player = credentialManager.findPlayerByEmail(restoreRequest.getEmail());
         // Step 2. Checking player does exists
@@ -48,7 +50,7 @@ public class PlayerPasswordResetServiceController implements PlayerPasswordReset
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = RESET_PASSWORD, produces = WebMapping.PRODUCES)
-    public boolean reset(@Validated @RequestBody PlayerPasswordResetRequest request) {
+    public boolean reset(@Valid @RequestBody PlayerPasswordResetRequest request) {
         // Step 1. Checking player & token match
         String player = tokenService.verify(request.getToken());
         // Step 2. If they match update player password

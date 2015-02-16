@@ -10,6 +10,7 @@ import com.clemble.casino.integration.event.EventListenerOperationsFactory;
 import com.clemble.casino.integration.goal.IntegrationGoalOperationsFactory;
 import com.clemble.casino.player.PlayerProfile;
 import com.clemble.casino.registration.*;
+import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
 import com.clemble.casino.server.connection.controller.PlayerFriendInvitationServiceController;
 import com.clemble.casino.server.email.controller.PlayerEmailServiceController;
 import com.clemble.casino.server.game.construction.controller.AutoGameConstructionController;
@@ -19,6 +20,7 @@ import com.clemble.casino.server.game.controller.GameActionServiceController;
 import com.clemble.casino.server.post.controller.PlayerFeedServiceController;
 import com.clemble.casino.server.presence.controller.PlayerSessionServiceController;
 import com.clemble.casino.server.registration.controller.PlayerPasswordResetServiceController;
+import com.clemble.casino.server.registration.controller.PlayerRegistrationController;
 import com.clemble.casino.social.SocialAccessGrant;
 import com.clemble.casino.social.SocialConnectionData;
 import com.clemble.casino.security.ClembleConsumerDetails;
@@ -33,12 +35,14 @@ import com.clemble.casino.utils.ClembleConsumerDetailUtils;
 import com.clemble.server.tag.controller.PlayerTagServiceController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.clemble.casino.server.notification.controller.PlayerNotificationServiceController;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 public class IntegrationClembleCasinoRegistrationOperations implements ClembleCasinoRegistrationOperations {
 
     final private String host;
     final private ObjectMapper objectMapper;
-    final private FacadeRegistrationService registrationService;
+    final private PlayerRegistrationController registrationController;
+    final private PlayerSocialRegistrationService socialRegistrationController;
     final private PlayerProfileServiceController profileOperations;
     final private PlayerImageServiceController imageService;
     final private PlayerConnectionServiceController connectionService;
@@ -65,7 +69,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         String host,
         ObjectMapper objectMapper,
         EventListenerOperationsFactory listenerOperations,
-        FacadeRegistrationService registrationService,
+        PlayerRegistrationController registrationController,
+        PlayerSocialRegistrationService socialRegistrationController,
         PlayerProfileServiceController profileOperations,
         PlayerImageServiceController imageService,
         PlayerConnectionServiceController connectionService,
@@ -88,7 +93,8 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
         PlayerTagServiceController tagServiceController) {
         this.host = checkNotNull(host);
         this.objectMapper = checkNotNull(objectMapper);
-        this.registrationService = checkNotNull(registrationService);
+        this.registrationController = checkNotNull(registrationController);
+        this.socialRegistrationController = checkNotNull(socialRegistrationController);
         this.listenerOperations = checkNotNull(listenerOperations);
         this.sessionOperations = checkNotNull(sessionOperations);
         this.profileOperations = checkNotNull(profileOperations);
@@ -114,28 +120,28 @@ public class IntegrationClembleCasinoRegistrationOperations implements ClembleCa
 
     @Override
     public ClembleCasinoOperations login(PlayerLoginRequest playerCredentials) {
-        String player = registrationService.login(playerCredentials);
+        String player = registrationController.httpLogin(playerCredentials, new MockHttpServletResponse());
         return create(player);
     }
 
     @Override
-    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, PlayerProfile playerProfile) {
         PlayerRegistrationRequest loginRequest = new PlayerRegistrationRequest(playerCredential, playerProfile);
-        String player = registrationService.register(loginRequest);
+        String player = registrationController.httpRegister(loginRequest, new MockHttpServletResponse());
         return create(player);
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
         PlayerSocialRegistrationRequest loginRequest = new PlayerSocialRegistrationRequest(playerCredential, socialConnectionData);
-        String player = registrationService.register(loginRequest);
+        String player = socialRegistrationController.register(loginRequest);
         return create(player);
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
         PlayerSocialGrantRegistrationRequest loginRequest = new PlayerSocialGrantRegistrationRequest(playerCredential, accessGrant);
-        String token = registrationService.register(loginRequest);
+        String token = socialRegistrationController.register(loginRequest);
         return create(token);
     }
 

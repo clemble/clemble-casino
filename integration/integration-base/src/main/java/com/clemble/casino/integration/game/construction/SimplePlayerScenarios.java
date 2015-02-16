@@ -40,7 +40,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
                 .setFirstName(RandomStringUtils.randomAlphabetic(10))
                 .setLastName(RandomStringUtils.randomAlphabetic(10))
                 .setNickName(RandomStringUtils.randomAlphabetic(10));
-        return createPlayer(credential, playerProfile);
+        return register(credential, playerProfile);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         PlayerCredential credential = new PlayerCredential(
             RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
             RandomStringUtils.randomAlphanumeric(10));
-        return createPlayer(credential, playerProfile);
+        return register(credential, playerProfile);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class SimplePlayerScenarios implements PlayerScenarios {
         PlayerCredential credential = new PlayerCredential(
             RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
             RandomStringUtils.randomAlphanumeric(10));
-        return createSocialPlayer(credential, socialConnectionData);
+        return register(credential, socialConnectionData);
     }
 
     @Override
@@ -66,12 +66,12 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             RandomStringUtils.randomAlphabetic(10) + "@gmail.com",
             RandomStringUtils.randomAlphanumeric(10));
         // Step 2. Create SocialPlayer profile
-        return createSocialPlayer(credential, socialConnectionData);
+        return register(credential, socialConnectionData);
     }
 
     @Override
     public ClembleCasinoOperations createPlayer(PlayerRegistrationRequest playerRegistrationRequest) {
-        return createPlayer(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
+        return register(playerRegistrationRequest.getPlayerCredential(), playerRegistrationRequest.getPlayerProfile());
     }
 
     @Override
@@ -80,18 +80,18 @@ public class SimplePlayerScenarios implements PlayerScenarios {
     }
 
     @Override
-    public ClembleCasinoOperations createPlayer(PlayerCredential playerCredential, PlayerProfile playerProfile) {
-        return initialize(registrationOperations.createPlayer(playerCredential, playerProfile));
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, PlayerProfile playerProfile) {
+        return initialize(registrationOperations.register(playerCredential, playerProfile));
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
-        return initialize(registrationOperations.createSocialPlayer(playerCredential, socialConnectionData));
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialConnectionData socialConnectionData) {
+        return initialize(registrationOperations.register(playerCredential, socialConnectionData));
     }
 
     @Override
-    public ClembleCasinoOperations createSocialPlayer(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
-        return initialize(registrationOperations.createSocialPlayer(playerCredential, accessGrant));
+    public ClembleCasinoOperations register(PlayerCredential playerCredential, SocialAccessGrant accessGrant) {
+        return initialize(registrationOperations.register(playerCredential, accessGrant));
     }
 
     private ClembleCasinoOperations initialize(final ClembleCasinoOperations player) {

@@ -44,6 +44,7 @@ import com.clemble.casino.server.notification.spring.PlayerNotificationSpringCon
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.post.spring.PlayerFeedSpringConfiguration;
+import com.clemble.casino.server.spring.WebBasicSpringConfiguration;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.bonus.spring.PaymentBonusSpringConfiguration;
@@ -64,6 +65,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
@@ -121,33 +123,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
 
         @Autowired
         public SystemNotificationServiceListener serviceListener;
-
-        @Bean
-        public FacadeRegistrationService playerFacadeRegistrationService(final PlayerRegistrationService registrationService, final PlayerSocialRegistrationService socialRegistrationService) {
-            return new FacadeRegistrationService() {
-
-                @Override
-                public String login(PlayerLoginRequest loginRequest) {
-                    return registrationService.login(loginRequest);
-                }
-
-                @Override
-                public String register(PlayerRegistrationRequest registrationRequest) {
-                    return registrationService.register(registrationRequest);
-                }
-
-                @Override
-                public String register(PlayerSocialRegistrationRequest socialRegistrationRequest) {
-                    return socialRegistrationService.register(socialRegistrationRequest);
-                }
-
-                @Override
-                public String register(PlayerSocialGrantRegistrationRequest grantRegistrationRequest) {
-                    return socialRegistrationService.register(grantRegistrationRequest);
-                }
-
-            };
-        }
 
         @Bean
         public EventAccumulator<SystemEvent> systemEventAccumulator() {

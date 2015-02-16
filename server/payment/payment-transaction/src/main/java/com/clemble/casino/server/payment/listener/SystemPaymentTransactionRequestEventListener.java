@@ -19,7 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,30 +30,26 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by mavarazy on 7/5/14.
  */
+@Validated
 public class SystemPaymentTransactionRequestEventListener implements SystemEventListener<SystemPaymentTransactionRequestEvent>{
 
     final private Logger LOG = LoggerFactory.getLogger(SystemPaymentTransactionRequestEventListener.class);
 
     final private ServerAccountService accountTemplate;
-    final private ClembleCasinoValidationService validationService;
 
-    public SystemPaymentTransactionRequestEventListener(
-        ServerAccountService accountTemplate,
-        ClembleCasinoValidationService validationService) {
+    public SystemPaymentTransactionRequestEventListener(ServerAccountService accountTemplate) {
         this.accountTemplate = checkNotNull(accountTemplate);
-        this.validationService = validationService;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void onEvent(SystemPaymentTransactionRequestEvent event) {
+    public void onEvent(@Valid SystemPaymentTransactionRequestEvent event) {
         PaymentTransaction paymentTransaction = event.getTransaction();
         LOG.debug("{} start", paymentTransaction.getTransactionKey());
         // Step 1. Sanity check
         if (paymentTransaction == null)
             throw ClembleCasinoException.fromError(ClembleCasinoError.PaymentTransactionEmpty, PlayerAware.DEFAULT_PLAYER, event.getTransaction().getTransactionKey());
         // Step 2. Processing payment transactions
-        validationService.validate(paymentTransaction);
         accountTemplate.process(paymentTransaction);
         LOG.debug("{} finish", paymentTransaction.getTransactionKey());
     }
