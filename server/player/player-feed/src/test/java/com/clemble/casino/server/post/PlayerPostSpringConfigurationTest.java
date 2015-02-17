@@ -2,6 +2,7 @@ package com.clemble.casino.server.post;
 
 import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -50,7 +51,7 @@ public class PlayerPostSpringConfigurationTest {
             new DateTime(0),
             Collections.emptySet(),
             DateTime.now(DateTimeZone.UTC),
-            false
+            GoalPhase.started
         );
         // Step 2. Saving player post twice
         postRepository.save(post);

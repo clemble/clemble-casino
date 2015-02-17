@@ -4,6 +4,7 @@ import com.clemble.casino.client.event.EventSelectors;
 import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.lifecycle.management.event.GoalManagementEvent;
@@ -37,7 +38,7 @@ public class GoalBetOffAspect extends GoalAspect<GoalManagementEvent> {
             // Step 3. Scheduling trigger
             notificationService.send(scheduleEvent);
         } else if (event instanceof GoalEndedEvent) {
-            if (event.getBody().getBetsAllowed()) {
+            if (event.getBody().getPhase() == GoalPhase.started) {
                 // Step 1. Generating shedule forbid bet event
                 SystemEvent unScheduleEvent = new SystemRemoveJobScheduleEvent(event.getBody().getGoalKey(), "forbid");
                 // Step 3. Scheduling trigger

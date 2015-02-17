@@ -2,6 +2,7 @@ package com.clemble.casino.goal.spring;
 
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
+import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalStateRepository;
 import com.clemble.casino.payment.Bank;
@@ -43,8 +44,8 @@ public class GoalStateRepositoryTest {
             ObjectGenerator.generate(GoalConfiguration.class),
             new GoalContext(null, Collections.emptyList()),
             Collections.<String>singleton(ObjectGenerator.generate(String.class)),
-            ObjectGenerator.generate(boolean.class),
-            ObjectGenerator.generate(String.class)
+            ObjectGenerator.generate(String.class),
+            ObjectGenerator.generate(GoalPhase.class)
         );
         // Step 2. Saving short goal state
         stateRepository.save(shortGoalState);

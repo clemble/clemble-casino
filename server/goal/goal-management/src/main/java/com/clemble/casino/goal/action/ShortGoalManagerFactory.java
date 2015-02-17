@@ -4,6 +4,7 @@ import com.clemble.casino.goal.event.GoalEvent;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.GoalContext;
+import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.lifecycle.management.GoalPlayerContext;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.record.GoalRecord;
@@ -59,8 +60,8 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
             initiation.getConfiguration(),
             goalContext,
             initiation.getSupporters(),
-            true,
-            "Go for it");
+            "Go for it",
+            GoalPhase.started);
         // Step 3. Saving state
         stateRepository.save(state);
         // Step 4. Creating manager factory

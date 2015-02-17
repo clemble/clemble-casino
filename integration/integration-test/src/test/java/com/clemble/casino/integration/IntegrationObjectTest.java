@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 
 import com.clemble.casino.bet.Bet;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
+import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
 import com.clemble.casino.notification.PlayerNotification;
@@ -101,7 +102,7 @@ public class IntegrationObjectTest {
                     new DateTime(0),
                     Collections.emptySet(),
                     DateTime.now(DateTimeZone.UTC),
-                    false
+                    GoalPhase.started
                 );
             }
         });
