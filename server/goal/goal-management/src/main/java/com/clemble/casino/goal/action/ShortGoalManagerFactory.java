@@ -60,7 +60,8 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
             goalContext,
             initiation.getSupporters(),
             "Go for it",
-            GoalPhase.started);
+            GoalPhase.started,
+            null);
         // Step 3. Saving state
         stateRepository.save(state);
         // Step 4. Creating manager factory

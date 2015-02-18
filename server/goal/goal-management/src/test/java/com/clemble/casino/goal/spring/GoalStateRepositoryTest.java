@@ -5,6 +5,7 @@ import com.clemble.casino.goal.lifecycle.management.GoalContext;
 import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.repository.GoalStateRepository;
+import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.random.ObjectGenerator;
 import org.joda.time.DateTime;
@@ -44,7 +45,8 @@ public class GoalStateRepositoryTest {
             new GoalContext(null, Collections.emptyList()),
             Collections.<String>singleton(ObjectGenerator.generate(String.class)),
             ObjectGenerator.generate(String.class),
-            ObjectGenerator.generate(GoalPhase.class)
+            ObjectGenerator.generate(GoalPhase.class),
+            ObjectGenerator.generate(Action.class)
         );
         // Step 2. Saving short goal state
         stateRepository.save(shortGoalState);

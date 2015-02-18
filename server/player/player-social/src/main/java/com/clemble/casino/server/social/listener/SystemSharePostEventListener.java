@@ -37,7 +37,7 @@ public class SystemSharePostEventListener implements SystemEventListener<SystemS
         ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(event.getPlayer());
         Connection<?> connection = connectionRepository.findConnections(event.getProviderId().name()).get(0);
         // Step 3. Fetching PlayerSocialNetwork and existing connections
-        socialAdapter.share(connection.getKey().getProviderId(), event.getPost().getGoal(), (ApiBinding) connection.getApi());
+        socialAdapter.share(connection.getKey().getProviderId(), event.getPost().getState().getGoal(), (ApiBinding) connection.getApi());
     }
 
     @Override
