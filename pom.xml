@@ -24,7 +24,7 @@
         <cglib.version>3.1</cglib.version>
         <cors-filter.version>2.2.1</cors-filter.version>
         <!-- AMQP dependencies -->
-        <spring.amqp.version>1.4.1.RELEASE</spring.amqp.version>
+        <spring.amqp.version>1.4.3.RELEASE</spring.amqp.version>
         <rabbitmq.driver.version>3.4.2</rabbitmq.driver.version>
         <!-- Quartz dependencies -->
         <quartz-mongodb.version>1.9.0</quartz-mongodb.version>

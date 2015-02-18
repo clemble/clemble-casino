@@ -55,7 +55,9 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking post appeared in player feed
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
+        boolean sizeIsOne = CheckUtils.check((i) -> A.feedService().myFeed().length == 1);
+        Assert.assertTrue(sizeIsOne);
+        Assert.assertTrue(A.feedService().myFeed()[0] instanceof GoalStartedPost);
     }
 
     @Test
