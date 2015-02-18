@@ -42,7 +42,7 @@ public class GoalDeadlineITest {
         final GoalOperations gA = A.goalOperations();
         // Step 2. Setting new goal
         final GoalConfiguration configuration = (GoalConfiguration) gA.configurationService().getConfigurations().get(0);
-        final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", "", DateTimeZone.UTC));
+        final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", DateTimeZone.UTC));
         final String goalKey = construction.getGoalKey();
         // Step 2.1. Checking goal initiated
         Assert.assertTrue(CheckUtils.checkNotNull((i) -> gA.initiationService().get(goalKey)));
@@ -62,7 +62,7 @@ public class GoalDeadlineITest {
         final GoalOperations gA = A.goalOperations();
         // Step 2. Setting new goal
         final GoalConfiguration configuration = (GoalConfiguration) gA.configurationService().getConfigurations().get(0);
-        final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", "", DateTimeZone.UTC));
+        final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", DateTimeZone.UTC));
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking goal has deadline in timeout
         Assert.assertTrue(CheckUtils.checkNotNull((i) -> gA.actionService().getState(goalKey)));

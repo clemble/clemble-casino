@@ -40,7 +40,6 @@ public class GoalStateRepositoryTest {
             ObjectGenerator.generate(Bank.class),
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(String.class),
-            ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(GoalConfiguration.class),
             new GoalContext(null, Collections.emptyList()),
             Collections.<String>singleton(ObjectGenerator.generate(String.class)),

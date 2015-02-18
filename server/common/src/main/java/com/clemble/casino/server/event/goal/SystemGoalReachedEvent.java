@@ -22,7 +22,6 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     final private String player;
     final private Set<String> supporters;
     final private String goal;
-    final private String reward;
     final private String tag;
 
     @JsonCreator
@@ -31,11 +30,9 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         @JsonProperty("player") String player,
         @JsonProperty("supporters") Set<String> supporters,
         @JsonProperty("goal") String goal,
-        @JsonProperty("reward") String reward,
         @JsonProperty("tag") String tag) {
         this.goalKey = goalKey;
         this.goal = goal;
-        this.reward = reward;
         this.supporters = supporters;
         this.player = player;
         this.tag = tag;
@@ -62,11 +59,6 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     }
 
     @Override
-    public String getReward() {
-        return reward;
-    }
-
-    @Override
     public String getTag() {
         return tag;
     }
@@ -84,7 +76,6 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         SystemGoalReachedEvent that = (SystemGoalReachedEvent) o;
 
         if (!goal.equals(that.goal)) return false;
-        if (!reward.equals(that.reward)) return false;
         if (!goalKey.equals(that.goalKey)) return false;
         if (!player.equals(that.player)) return false;
 
