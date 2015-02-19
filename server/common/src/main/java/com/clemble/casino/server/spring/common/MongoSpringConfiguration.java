@@ -1,7 +1,6 @@
 package com.clemble.casino.server.spring.common;
 
-import com.clemble.casino.server.converters.BreachPunishmentToString;
-import com.clemble.casino.server.converters.StringToBreachPunishment;
+import com.clemble.casino.server.converters.*;
 import com.mongodb.MongoClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +30,9 @@ public class MongoSpringConfiguration implements SpringConfiguration {
         GenericConversionService conversionService = (GenericConversionService) template.getConverter().getConversionService();
         conversionService.addConverter(new StringToBreachPunishment());
         conversionService.addConverter(new BreachPunishmentToString());
+        conversionService.addConverter(new StringToDateTimeZone());
+        conversionService.addConverter(new DateTimeZoneToString());
+        conversionService.addConverter(new FixedDateTimeZoneToString());
 
         return template;
     }

@@ -39,7 +39,7 @@ public class GoalSurrenderITest {
         final GoalOperations AgoalOps = A.goalOperations();
         // Step 2. Create a goal
         final GoalConfiguration Aconf = AgoalOps.configurationService().getConfigurations().get(0);
-        final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", DateTimeZone.UTC));
+        final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", "UTC"));
         final String goalKey = AgoalConst.getGoalKey();
         CheckUtils.check((i) -> AgoalOps.actionService().getState(goalKey) != null);
         EventAccumulator<PaymentCompleteEvent> paymentAccumulator = new EventAccumulator<PaymentCompleteEvent>();

@@ -49,7 +49,7 @@ public class GoalFeedShareTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Checking share works

@@ -54,7 +54,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
         boolean sizeIsOne = CheckUtils.check((i) -> B.feedService().myFeed().length == 1);
         Assert.assertTrue(sizeIsOne);
@@ -73,7 +73,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(1);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Bidding on goal appeared
@@ -117,7 +117,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking started event
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
@@ -137,7 +137,7 @@ public class GoalFeedTest {
         // Step 2. Checking configuration
         final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
-        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
+        final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking started event
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
@@ -173,7 +173,7 @@ public class GoalFeedTest {
         A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         // Step 3. Creating construction
-        goalA.constructionService().construct(new GoalConstructionRequest(FORBID_CONFIGURATION, "Goal A", DateTimeZone.UTC));
+        goalA.constructionService().construct(new GoalConstructionRequest(FORBID_CONFIGURATION, "Goal A", "UTC"));
         // Step 4. Checking forbid post
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetOffPost));
     }

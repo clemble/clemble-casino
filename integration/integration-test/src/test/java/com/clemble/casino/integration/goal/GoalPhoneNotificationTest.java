@@ -82,7 +82,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", DateTimeZone.UTC);
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test sms notification", "UTC");
         A.goalOperations().constructionService().construct(requestA);
         // Step 3. Checking timeout sms notification received
         SystemPhoneSMSSendRequestEvent reminderNotification = (SystemPhoneSMSSendRequestEvent) systemEventAccumulator.waitFor(smsSelector);
@@ -100,7 +100,7 @@ public class GoalPhoneNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemPhoneSMSSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", DateTimeZone.UTC);
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test supporter phone notification", "UTC");
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->

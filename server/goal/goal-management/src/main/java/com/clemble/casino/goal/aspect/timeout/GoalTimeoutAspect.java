@@ -40,7 +40,7 @@ public class GoalTimeoutAspect extends GoalAspect<GoalManagementEvent>{
     protected void doEvent(GoalManagementEvent event) {
         // Step 1. Preparing for processing
         GoalState goalState = event.getBody();
-        DateTimeZone timezone = goalState.getTimezone();
+        String timezone = goalState.getTimezone();
         String goalKey = event.getBody().getGoalKey();
         GoalContext context = event.getBody().getContext();
         // Step 2. Process depending on event

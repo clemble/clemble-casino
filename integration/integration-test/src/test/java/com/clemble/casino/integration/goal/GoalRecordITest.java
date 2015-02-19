@@ -63,7 +63,7 @@ public class GoalRecordITest {
         // Step 1. Creating player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating GoalRequest
-        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", DateTimeZone.UTC);
+        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", "UTC");
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction
@@ -92,7 +92,7 @@ public class GoalRecordITest {
         // Step 1. Creating player
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating GoalRequest
-        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", DateTimeZone.UTC);
+        GoalConstructionRequest goalRequest = new GoalConstructionRequest(CONFIGURATION, "Simple test", "UTC");
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction

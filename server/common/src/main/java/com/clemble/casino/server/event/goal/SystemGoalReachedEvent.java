@@ -23,7 +23,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     final private String player;
     final private Set<String> supporters;
     final private String goal;
-    final private DateTimeZone timezone;
+    final private String timezone;
     final private String tag;
 
     @JsonCreator
@@ -32,7 +32,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         @JsonProperty("player") String player,
         @JsonProperty("supporters") Set<String> supporters,
         @JsonProperty("goal") String goal,
-        @JsonProperty("timezone") DateTimeZone timezone,
+        @JsonProperty("timezone") String timezone,
         @JsonProperty("tag") String tag) {
         this.goalKey = goalKey;
         this.goal = goal;
@@ -63,7 +63,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     }
 
     @Override
-    public DateTimeZone getTimezone() {
+    public String getTimezone() {
         return timezone;
     }
 

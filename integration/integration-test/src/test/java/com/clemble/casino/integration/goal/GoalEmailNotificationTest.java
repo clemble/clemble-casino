@@ -81,7 +81,7 @@ public class GoalEmailNotificationTest {
             where(new PlayerEventSelector(A.getPlayer())).
             and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
         // Step 2. Create construction
-        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", DateTimeZone.UTC);
+        GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", "UTC");
         A.goalOperations().constructionService().construct(requestA);
         // Step 3. Checking timeout email notification received
         SystemEmailSendRequestEvent reminderNotification = (SystemEmailSendRequestEvent) systemEventAccumulator.waitFor(emailSelector);
@@ -102,7 +102,7 @@ public class GoalEmailNotificationTest {
             where(new PlayerEventSelector(B.getPlayer())).
             and(new EventTypeSelector(SystemEmailSendRequestEvent.class));
         // Step 3. Creating requests
-        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", DateTimeZone.UTC);
+        final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", "UTC");
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
         CheckUtils.check((i) ->
