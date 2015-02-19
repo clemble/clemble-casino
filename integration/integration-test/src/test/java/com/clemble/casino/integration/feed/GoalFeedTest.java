@@ -24,6 +24,7 @@ import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalcu
 import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
+import com.clemble.casino.player.Invitation;
 import org.junit.Assert;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
@@ -47,17 +48,20 @@ public class GoalFeedTest {
 
     @Test
     public void testStartedPost() {
-        // Step 1. Creating player A
+        // Step 1. Creating player A & B
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
+        final ClembleCasinoOperations B = playerScenarios.createPlayer();
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         // Step 2. Checking configuration
-        final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
+        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking post appeared in player feed
-        boolean sizeIsOne = CheckUtils.check((i) -> A.feedService().myFeed().length == 1);
+        boolean sizeIsOne = CheckUtils.check((i) -> B.feedService().myFeed().length == 1);
         Assert.assertTrue(sizeIsOne);
-        Assert.assertTrue(A.feedService().myFeed()[0] instanceof GoalStartedPost);
+        Assert.assertTrue(B.feedService().myFeed()[0] instanceof GoalStartedPost);
     }
 
     @Test
@@ -65,18 +69,20 @@ public class GoalFeedTest {
         // Step 1. Creating player A
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
         final ClembleCasinoOperations B = playerScenarios.createPlayer();
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         final GoalOperations goalB = B.goalOperations();
         // Step 2. Checking configuration
-        final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(1);
+        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(1);
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking post appeared in player feed
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Bidding on goal appeared
         goalB.actionService().process(constructionA.getGoalKey(), new BidAction());
         // Step 6. Checking bid appeared
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBetPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetPost));
     }
 
 //    @Test
@@ -107,34 +113,40 @@ public class GoalFeedTest {
     public void testUpdatedPost() {
         // Step 1. Creating player A
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
+        final ClembleCasinoOperations B = playerScenarios.createPlayer();
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         // Step 2. Checking configuration
-        final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
+        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking started event
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalStatusUpdateAction("Update action"));
         // Step 6. Checking post
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalUpdatedPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalUpdatedPost));
     }
 
     @Test
     public void testReachedPost() {
         // Step 1. Creating player A
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
+        final ClembleCasinoOperations B = playerScenarios.createPlayer();
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         // Step 2. Checking configuration
-        final GoalConfiguration configuration = (GoalConfiguration) goalA.configurationService().getConfigurations().get(0);
+        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking started event
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalReachedAction("Update action"));
         // Step 6. Checking post
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalReachedPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalReachedPost));
     }
 
     final private GoalConfiguration FORBID_CONFIGURATION = new GoalConfiguration(
@@ -159,11 +171,14 @@ public class GoalFeedTest {
     public void testForbidPost() {
         // Step 1. Creating player A
         final ClembleCasinoOperations A = playerScenarios.createPlayer();
+        final ClembleCasinoOperations B = playerScenarios.createPlayer();
+        B.friendInvitationService().invite(new Invitation(A.getPlayer()));
+        A.friendInvitationService().reply(B.getPlayer(), true);
         final GoalOperations goalA = A.goalOperations();
         // Step 3. Creating construction
         goalA.constructionService().construct(new GoalConstructionRequest(FORBID_CONFIGURATION, "Goal A", DateTimeZone.UTC));
         // Step 4. Checking forbid post
-        Assert.assertTrue(CheckUtils.check((i) -> A.feedService().myFeed().length == 1 && A.feedService().myFeed()[0] instanceof GoalBetOffPost));
+        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetOffPost));
     }
 
 }
