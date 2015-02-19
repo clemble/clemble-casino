@@ -25,7 +25,6 @@ import com.clemble.casino.game.lifecycle.configuration.rule.outcome.DrawRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.outcome.WonRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.visibility.VisibilityRule;
 import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
@@ -46,7 +45,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.http.MockHttpInputMessage;
 import org.springframework.mock.http.MockHttpOutputMessage;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.event.Event;
@@ -59,7 +57,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ClembleIntegrationTest
@@ -221,7 +218,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         RoundGameConfiguration roundConfiguration = new RoundGameConfiguration(
             Game.num,
             "low",
-            Money.create(Currency.FakeMoney, 50),
+            Money.create(Currency.point, 50),
             UnlimitedBetRule.INSTANCE,
             GiveUpRule.all,
             new MoveTimeRule(2000, LooseBreachPunishment.getInstance()),
@@ -240,7 +237,7 @@ public class IntegrationObjectMapperTest extends IntegrationObjectTest {
         MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(
             Game.pot,
             "pot",
-            Money.create(Currency.FakeMoney, 200),
+            Money.create(Currency.point, 200),
             PrivacyRule.world,
             PlayerNumberRule.two,
             MatchFillRule.none,

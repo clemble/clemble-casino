@@ -5,10 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import com.clemble.casino.integration.ClembleIntegrationTest;
-import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.server.event.payment.SystemPaymentTransactionRequestEvent;
 import com.clemble.casino.server.payment.listener.SystemPaymentTransactionRequestEventListener;
@@ -22,14 +20,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -65,9 +60,9 @@ public class PaymentTransactionOperationsTest {
             .setTransactionDate(DateTime.now(DateTimeZone.UTC))
             .setProcessingDate(DateTime.now(DateTimeZone.UTC))
             .addOperation(
-                new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 60), Operation.Credit))
+                new PaymentOperation(player.getPlayer(), Money.create(Currency.point, 60), Operation.Credit))
             .addOperation(
-                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.point, 50), Operation.Debit));
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
 
@@ -83,9 +78,9 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionKey(ObjectGenerator.generate(String.class))
                 .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                 .addOperation(
-                        new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+                        new PaymentOperation(player.getPlayer(), Money.create(Currency.point, 50), Operation.Credit))
                 .addOperation(
-                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.point, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -105,9 +100,9 @@ public class PaymentTransactionOperationsTest {
                 .setTransactionKey(transactionId)
                 .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                 .addOperation(
-                        new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+                        new PaymentOperation(player.getPlayer(), Money.create(Currency.point, 50), Operation.Credit))
                 .addOperation(
-                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                        new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.point, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
@@ -128,9 +123,9 @@ public class PaymentTransactionOperationsTest {
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(transactionId)
             .addOperation(
-                    new PaymentOperation(player.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+                    new PaymentOperation(player.getPlayer(), Money.create(Currency.point, 50), Operation.Credit))
             .addOperation(
-                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                    new PaymentOperation(anotherPlayer.getPlayer(), Money.create(Currency.point, 50), Operation.Debit));
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 

@@ -5,14 +5,12 @@ import static org.junit.Assert.assertEquals;
 import java.util.concurrent.TimeUnit;
 
 import com.clemble.casino.integration.ClembleIntegrationTest;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.payment.PaymentOperation;
@@ -26,7 +24,6 @@ import com.clemble.casino.server.bonus.listener.DailyBonusEventListener;
 import com.clemble.casino.server.payment.repository.PaymentTransactionRepository;
 import com.clemble.casino.server.payment.repository.ServerAccountService;
 import com.clemble.test.random.ObjectGenerator;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ClembleIntegrationTest
@@ -46,7 +43,7 @@ public class DailyBonusServiceTest {
         // Step 1. Generating player identity
         final String player = ObjectGenerator.generate(String.class);
         // Step 2. Creating money
-        Money amount = Money.create(Currency.FakeMoney, 100);
+        Money amount = Money.create(Currency.point, 100);
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey("dailybonus" + player)
             .setTransactionDate(new DateTime(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1)))

@@ -16,7 +16,6 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
@@ -33,9 +32,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,14 +53,14 @@ public class GoalPhoneNotificationTest {
     final private GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "phone:notification:test",
         "Phone Notification Test",
-        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
         NoReminderRule.INSTANCE,
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(4))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
             NoReminderRule.INSTANCE,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1))

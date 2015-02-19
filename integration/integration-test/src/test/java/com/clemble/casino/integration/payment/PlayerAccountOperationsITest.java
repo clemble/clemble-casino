@@ -19,9 +19,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
 import com.clemble.casino.client.event.EventListener;
@@ -30,7 +28,6 @@ import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.game.Game;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.test.util.ClembleCasinoExceptionMatcherFactory;
 import com.clemble.casino.payment.PaymentOperation;
 import com.clemble.casino.payment.PaymentTransaction;
@@ -76,7 +73,7 @@ public class PlayerAccountOperationsITest {
         // Step 2. Fetching account and precondition
         PlayerAccount accountA = A.accountService().myAccount();
         assertTrue(accountA.getMoney().size() > 0);
-        assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
+        assertTrue(accountA.getMoney(Currency.point).getAmount() > 0);
         // Step 3. Checking registration transaction
         A.paymentOperations().myTransactions();
         String transactionKey = RegistrationBonusPaymentSource.INSTANCE.toTransactionKey(A.getPlayer());
@@ -94,7 +91,7 @@ public class PlayerAccountOperationsITest {
         Money dailyBonusAmount = paymentOperations.iterator().next().getAmount();
         // Step 4.2 Checking email bonus transaction (Which might be delayed, because of the system event delays)
         // Step 5. Checking matches
-        assertEquals(transactionAmount.add(dailyBonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.FakeMoney));
+        assertEquals(transactionAmount.add(dailyBonusAmount.getAmount()), A.accountService().myAccount().getMoney(Currency.point));
     }
 
     @Test
@@ -106,20 +103,20 @@ public class PlayerAccountOperationsITest {
         AsyncCompletionUtils.equals(new Get<Money>() {
             @Override
             public Money get() {
-                return A.accountService().myAccount().getMoney(Currency.FakeMoney);
+                return A.accountService().myAccount().getMoney(Currency.point);
             }
         }, new Get<Money>() {
             @Override
             public Money get() {
-                return B.accountService().myAccount().getMoney(Currency.FakeMoney);
+                return B.accountService().myAccount().getMoney(Currency.point);
             }
         });
 
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.GameConstructionInsufficientMoney));
 
         do {
-            final Money cashAbefore = A.accountService().myAccount().getMoney(Currency.FakeMoney);
-            final Money cashBbefore = B.accountService().myAccount().getMoney(Currency.FakeMoney);
+            final Money cashAbefore = A.accountService().myAccount().getMoney(Currency.point);
+            final Money cashBbefore = B.accountService().myAccount().getMoney(Currency.point);
 
             assertTrue("Unexpected amount " + cashAbefore.getAmount() + " for " + A.getPlayer(), cashAbefore.getAmount() >= 0);
             assertTrue("Unexpected amount " + cashBbefore.getAmount() + " for " + B.getPlayer(),cashBbefore.getAmount() >= 0);
@@ -144,14 +141,14 @@ public class PlayerAccountOperationsITest {
                 @Override
                 public boolean check() {
                     Money Aexpected = cashAbefore.add(price.negate());
-                    Money Aactual = A.accountService().myAccount().getMoney(Currency.FakeMoney);
+                    Money Aactual = A.accountService().myAccount().getMoney(Currency.point);
                     return Aexpected.equals(Aactual);
                 }
             }, 30_000);
             AsyncCompletionUtils.check(new Check(){
                 @Override
                 public boolean check() {
-                    return cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.FakeMoney));
+                    return cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.point));
                 }
             }, 30_000);
         } while (true);
@@ -166,17 +163,17 @@ public class PlayerAccountOperationsITest {
         PlayerAccount accountA = player.accountService().myAccount();
         // Step 3. Checking that there are some fake moneys in the newly created account
         assertNotNull(accountA);
-        assertNotNull(accountA.getMoney(Currency.FakeMoney));
-        assertTrue(accountA.getMoney(Currency.FakeMoney).getAmount() > 0);
+        assertNotNull(accountA.getMoney(Currency.point));
+        assertTrue(accountA.getMoney(Currency.point).getAmount() > 0);
         // Step 4. Checking that there are some fake moneys in the newly created account, accesed through WalletOperations
         PlayerAccount accountB = player.accountService().myAccount();
         assertNotNull(accountB);
-        assertNotNull(accountB.getMoney(Currency.FakeMoney));
+        assertNotNull(accountB.getMoney(Currency.point));
         assertEquals(accountB, accountA);
         // Step 5. Checking that there are some fake moneys in the newly created account, accesed through another WalletOperations
         PlayerAccount anotherWallet = player.accountService().myAccount();
         assertNotNull(anotherWallet);
-        assertNotNull(anotherWallet.getMoney(Currency.FakeMoney));
+        assertNotNull(anotherWallet.getMoney(Currency.point));
         assertEquals(anotherWallet, accountA);
     }
 

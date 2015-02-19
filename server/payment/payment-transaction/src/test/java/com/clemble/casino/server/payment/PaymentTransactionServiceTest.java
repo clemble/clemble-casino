@@ -50,16 +50,16 @@ public class PaymentTransactionServiceTest {
 
         PaymentTransaction transaction = new PaymentTransaction().
             setTransactionKey(playerFrom + ":" + playerTo).
-            addOperation(new PaymentOperation(playerFrom, Money.create(Currency.FakeMoney, 100), Operation.Debit)).
-            addOperation(new PaymentOperation(playerTo, Money.create(Currency.FakeMoney, 100), Operation.Debit)).
-            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.FakeMoney, 200), Operation.Credit));
+            addOperation(new PaymentOperation(playerFrom, Money.create(Currency.point, 100), Operation.Debit)).
+            addOperation(new PaymentOperation(playerTo, Money.create(Currency.point, 100), Operation.Debit)).
+            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.point, 200), Operation.Credit));
 
         accountTemplate.process(transaction);
     }
 
     @Test
     public void testWalletUpdate() {
-        Money amount = Money.create(Currency.FakeMoney, RANDOM.nextInt(100));
+        Money amount = Money.create(Currency.point, RANDOM.nextInt(100));
 
         String transactionKey = "TicTacToe" + RANDOM.nextLong();
 
@@ -71,8 +71,8 @@ public class PaymentTransactionServiceTest {
 
         eventListener.onEvent(new SystemPaymentTransactionRequestEvent(paymentTransaction));
 
-        Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.FakeMoney).getAmount(), 100 + amount.getAmount());
-        Assert.assertEquals(accountTemplate.findOne(playerFrom).getMoney(Currency.FakeMoney).getAmount(), 100 - amount.getAmount());
+        Assert.assertEquals(accountTemplate.findOne(playerTo).getMoney(Currency.point).getAmount(), 100 + amount.getAmount());
+        Assert.assertEquals(accountTemplate.findOne(playerFrom).getMoney(Currency.point).getAmount(), 100 - amount.getAmount());
     }
 
 }

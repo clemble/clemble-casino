@@ -42,14 +42,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         new GoalConfiguration(
             "week",
             "Week",
-            new Bet(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 500)),
+            new Bet(Money.create(Currency.point, 300), Money.create(Currency.point, 500)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
+            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
             PrivacyRule.me,
             new GoalRoleConfiguration(
-                new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
+                new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                 3,
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -59,14 +59,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         new GoalConfiguration(
             "2weeks",
             "2 Weeks",
-            new Bet(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 800)),
+            new Bet(Money.create(Currency.point, 300), Money.create(Currency.point, 800)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
+            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)),
             PrivacyRule.friends,
             new GoalRoleConfiguration(
-                new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 90)),
+                new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 90)),
                 7,
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -76,26 +76,26 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         new GoalConfiguration(
             "month",
             "Month",
-            new Bet(Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 1300)),
+            new Bet(Money.create(Currency.point, 300), Money.create(Currency.point, 1300)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(1)),
+            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(30)),
             PrivacyRule.world,
-            new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 15, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+            new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 15, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
             new ShareRule(ImmutableSet.of(SocialProvider.twitter))
         )
     );
 
     final private GoalConfigurationChoices DEFAULT_CHOICES = new GoalConfigurationChoices(
-        ImmutableList.of(Money.create(Currency.FakeMoney, 200), Money.create(Currency.FakeMoney, 300), Money.create(Currency.FakeMoney, 400)),
+        ImmutableList.of(Money.create(Currency.point, 200), Money.create(Currency.point, 300), Money.create(Currency.point, 400)),
         ImmutableList.of(
             new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)), 30),
             new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(14)), 70),
             new GoalRuleValue<TimeoutRule>(new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(21)), 130)
         ),
         ImmutableList.of(
-            new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 0)
+            new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 0)
         ),
         ImmutableList.of(
             new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)
@@ -108,7 +108,7 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
             new GoalRuleValue<PrivacyRule>(PrivacyRule.friends, 30)
         ),
         ImmutableList.of(
-            new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
+            new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)
         ),
         ImmutableList.of(
             new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0),
@@ -120,14 +120,14 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         new GoalConfiguration(
             "week",
             "Week",
-            new Bet(Money.create(Currency.FakeMoney, 0), Money.create(Currency.FakeMoney, 0)),
+            new Bet(Money.create(Currency.point, 0), Money.create(Currency.point, 0)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
             new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
-            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(7)),
+            new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(7)),
             new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
             PrivacyRule.me,
             new GoalRoleConfiguration(
-                new Bet(Money.create(Currency.FakeMoney, 50), Money.create(Currency.FakeMoney, 70)),
+                new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                 3,
                 NoReminderRule.INSTANCE,
                 NoReminderRule.INSTANCE
@@ -140,8 +140,8 @@ public class GoalConfigurationServiceController implements GoalConfigurationServ
         ImmutableList.<IntervalGoalRule>of(
             new IntervalGoalRule(PrivacyRule.friends, 50, 10),
             new IntervalGoalRule(PrivacyRule.world, 50, 12),
-            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new EODTimeoutCalculator(2)), 50, 15),
-            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 20)), new EODTimeoutCalculator(1)), 50, 20),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(2)), 50, 15),
+            new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 50, 20),
             new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 50, 15),
             new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 50, 20)
         )

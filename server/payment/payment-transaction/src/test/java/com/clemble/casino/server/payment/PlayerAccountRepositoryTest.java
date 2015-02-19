@@ -40,7 +40,7 @@ public class PlayerAccountRepositoryTest {
     @Test
     public void testVersionUpdate() {
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
 
         PlayerAccount saved = accountRepository.save(account);
@@ -51,7 +51,7 @@ public class PlayerAccountRepositoryTest {
     @Test
     public void testUpdateInParallel() throws InterruptedException, ExecutionException {
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
 
         PlayerAccount saved = accountRepository.save(account);
@@ -63,7 +63,7 @@ public class PlayerAccountRepositoryTest {
         for(int i = 0; i < 50; i++) {
             int amount = 1 + RANDOM.nextInt(20);
             summary += amount;
-            Money debit = Money.create(Currency.FakeMoney, amount);
+            Money debit = Money.create(Currency.point, amount);
             tasks.add(new UpdateTask(player, debit, serverAccountService));
         }
         List<Future<PlayerAccount>> futureTasks = executorService.invokeAll(tasks);
@@ -72,7 +72,7 @@ public class PlayerAccountRepositoryTest {
         }
         executorService.shutdown();
 
-        Assert.assertEquals(serverAccountService.findOne(player).getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 500 + summary));
+        Assert.assertEquals(serverAccountService.findOne(player).getMoney(Currency.point), Money.create(Currency.point, 500 + summary));
     }
 
     @Test
@@ -80,15 +80,15 @@ public class PlayerAccountRepositoryTest {
         // Step 1. Creating player account
         String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = serverAccountService.findOne(player);
-        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getMoney(Currency.point), Money.create(Currency.point, 450));
     }
 
     @Test
@@ -96,23 +96,23 @@ public class PlayerAccountRepositoryTest {
         // Step 1. Creating player account
         String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = serverAccountService.findOne(player);
-        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getMoney(Currency.point), Money.create(Currency.point, 450));
         // Step 4. Processing Debit for this operation
         PaymentTransaction transaction = new PaymentTransaction().setTransactionKey(transactionKey).
-            addOperation(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Debit)).
-            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.FakeMoney, 50), Operation.Credit));
+            addOperation(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Debit)).
+            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.point, 50), Operation.Credit));
         serverAccountService.process(transaction);
         PlayerAccount afterProcessing = serverAccountService.findOne(player);
         // Step 5. Checking final amount return to the original
-        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 550));
+        Assert.assertEquals(afterProcessing.getMoney(Currency.point), Money.create(Currency.point, 550));
     }
 
     @Test
@@ -120,23 +120,23 @@ public class PlayerAccountRepositoryTest {
         // Step 1. Creating player account
         String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
         PlayerAccount saved = accountRepository.save(account);
         Assert.assertEquals(saved.getVersion(), Integer.valueOf(0));
         // Step 2. Freezing some amount on the account
-        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        serverAccountService.freeze(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Credit)), null));
         // Step 3. Checking amount changed
         PlayerAccount another = serverAccountService.findOne(player);
-        Assert.assertEquals(another.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(another.getMoney(Currency.point), Money.create(Currency.point, 450));
         // Step 4. Processing Debit for this operation
         PaymentTransaction transaction = new PaymentTransaction().setTransactionKey(transactionKey).
-            addOperation(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)).
-            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.FakeMoney, 50), Operation.Debit));
+            addOperation(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Credit)).
+            addOperation(new PaymentOperation(PlayerAware.DEFAULT_PLAYER, Money.create(Currency.point, 50), Operation.Debit));
         serverAccountService.process(transaction);
         PlayerAccount afterProcessing = serverAccountService.findOne(player);
         // Step 5. Checking final amount return to the original
-        Assert.assertEquals(afterProcessing.getMoney(Currency.FakeMoney), Money.create(Currency.FakeMoney, 450));
+        Assert.assertEquals(afterProcessing.getMoney(Currency.point), Money.create(Currency.point, 450));
     }
 
     public static class UpdateTask implements Callable<PlayerAccount> {

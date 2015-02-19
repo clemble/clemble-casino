@@ -45,11 +45,11 @@ public class PaymentValidationTest {
         // Step 1. Preparing environment
         String transactionKey = RandomStringUtils.randomAlphabetic(5);
         String player = RandomStringUtils.randomAlphabetic(5);
-        Map<Currency, Money> money = Collections.singletonMap(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500));
+        Map<Currency, Money> money = Collections.singletonMap(Currency.point, Money.create(Currency.point, 500));
         PlayerAccount account = new PlayerAccount(player, money, null);
         PlayerAccount saved = accountRepository.save(account);
         // Step 2. Creating appropriate event
-        SystemPaymentFreezeRequestEvent event = new SystemPaymentFreezeRequestEvent(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.FakeMoney, 50), Operation.Credit)), null));
+        SystemPaymentFreezeRequestEvent event = new SystemPaymentFreezeRequestEvent(new PendingTransaction(transactionKey, Collections.singleton(new PaymentOperation(player, Money.create(Currency.point, 50), Operation.Credit)), null));
         // Step 3. Generating exception conditions
         expectedException.expect(ClembleCasinoExceptionMatcherFactory.fromErrors(ClembleCasinoError.PaymentTransactionDebitAndCreditNotMatched));
         freezeRequestEventListener.onEvent(event);

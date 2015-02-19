@@ -55,13 +55,13 @@ public class ShortGoalManagerFactoryTest {
     final private GoalConfiguration configuration = new GoalConfiguration(
         "basic",
         "Basic",
-        new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         PrivacyRule.me,
-        new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.EMPTY
     );
 

@@ -12,17 +12,10 @@ import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
-import com.clemble.test.concurrent.AsyncCompletionUtils;
-import com.clemble.test.concurrent.Check;
-import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.test.annotation.Repeat;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
@@ -37,7 +30,6 @@ import com.clemble.casino.game.lifecycle.configuration.MatchGameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.RoundGameConfiguration;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.payment.PaymentTransaction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -66,7 +58,7 @@ public class MatchGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.FakeMoney, 200), PrivacyRule.world, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
+        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.point, 200), PrivacyRule.world, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
 
         System.out.println(objectMapper.writeValueAsString(matchConfiguration));
     }
@@ -115,8 +107,8 @@ public class MatchGameConstructionITest {
 
         // Processing is async, so payment might complete only after certain delay
         boolean check = CheckUtils.check((test) -> {
-            Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
-            Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
+            Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.point);
+            Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.point);
 
             long mBAmount = mB.getAmount();
             long expectedAmount = mA.add(300).getAmount();
@@ -125,8 +117,8 @@ public class MatchGameConstructionITest {
         });
         assertTrue(check);
 
-        Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
-        Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.FakeMoney);
+        Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.point);
+        Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.point);
 
         long mBAmount = mB.getAmount();
         long expectedAmount = mA.add(300).getAmount();

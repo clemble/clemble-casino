@@ -11,7 +11,6 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.CountdownBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
@@ -30,9 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,14 +43,14 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
     final private GoalConfiguration LOOSE_PUNISHMENT = new GoalConfiguration(
         "move:loose:punishment",
         "move:loose:punishment",
-        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
@@ -64,14 +61,14 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
     final private GoalConfiguration PENALTY_PUNISHMENT = new GoalConfiguration(
         "move:penalty:punishment",
         "move:penalty:punishment",
-        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 30)),
+        new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 30)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
-        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
-        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.FakeMoney, 10)), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
+        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
+        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
@@ -82,14 +79,14 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
     final private GoalConfiguration COUNTDOWN_PUNISHMENT = new GoalConfiguration(
         "move:countdown:punishment",
         "move:countdown:punishment",
-        new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
-        new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.FakeMoney, 10), 100), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
-        new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.FakeMoney, 10), 100), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
+        new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.point, 10), 100), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
+        new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.point, 10), 100), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         PrivacyRule.world,
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.FakeMoney, 100), Money.create(Currency.FakeMoney, 50)),
+            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE

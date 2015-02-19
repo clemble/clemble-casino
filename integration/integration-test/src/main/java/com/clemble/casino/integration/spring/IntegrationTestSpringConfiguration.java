@@ -28,9 +28,6 @@ import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.registration.*;
-import com.clemble.casino.registration.service.PlayerRegistrationService;
-import com.clemble.casino.registration.service.PlayerSocialRegistrationService;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.schedule.spring.ScheduleSpringConfiguration;
@@ -44,7 +41,6 @@ import com.clemble.casino.server.notification.spring.PlayerNotificationSpringCon
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.server.player.notification.SystemNotificationServiceListener;
 import com.clemble.casino.server.post.spring.PlayerFeedSpringConfiguration;
-import com.clemble.casino.server.spring.WebBasicSpringConfiguration;
 import com.clemble.casino.server.spring.WebJsonSpringConfiguration;
 import com.clemble.casino.server.spring.common.PropertiesSpringConfiguration;
 import com.clemble.casino.server.bonus.spring.PaymentBonusSpringConfiguration;
@@ -65,7 +61,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.client.RestTemplate;
 
 import com.clemble.casino.android.AndroidCasinoRegistrationTemplate;
@@ -162,7 +157,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             RoundGameConfiguration roundConfiguration = new RoundGameConfiguration(
                 Game.num,
                 "low",
-                Money.create(Currency.FakeMoney, 50),
+                Money.create(Currency.point, 50),
                 UnlimitedBetRule.INSTANCE,
                 GiveUpRule.all,
                 new MoveTimeRule(2000, LooseBreachPunishment.getInstance()),
@@ -180,7 +175,7 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
             MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(
                 Game.pot,
                 "pot",
-                Money.create(Currency.FakeMoney, 200),
+                Money.create(Currency.point, 200),
                 PrivacyRule.world,
                 PlayerNumberRule.two,
                 MatchFillRule.none,

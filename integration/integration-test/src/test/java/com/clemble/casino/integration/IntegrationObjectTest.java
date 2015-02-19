@@ -12,8 +12,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import com.clemble.casino.bet.Bet;
-import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
-import com.clemble.casino.goal.lifecycle.management.GoalPhase;
 import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBidRule;
@@ -194,7 +192,7 @@ public class IntegrationObjectTest {
             public PlayerAccount generate() {
             return new PlayerAccount(
                 RandomStringUtils.random(5),
-                ImmutableMap.of(Currency.FakeMoney, Money.create(Currency.FakeMoney, 500)),
+                ImmutableMap.of(Currency.point, Money.create(Currency.point, 500)),
                 null);
             }
         });
@@ -218,9 +216,9 @@ public class IntegrationObjectTest {
                         .setTransactionDate(DateTime.now(DateTimeZone.UTC))
                         .setProcessingDate(DateTime.now(DateTimeZone.UTC))
                         .addOperation(
-                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Credit))
+                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.point, 50), Operation.Credit))
                         .addOperation(
-                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.FakeMoney, 50), Operation.Debit));
+                            new PaymentOperation(RandomStringUtils.random(5), Money.create(Currency.point, 50), Operation.Debit));
             }
         });
         register(PlayerCredential.class, new AbstractValueGenerator<PlayerCredential>() {
@@ -291,7 +289,7 @@ public class IntegrationObjectTest {
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
             @Override
             public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.FakeMoney, 50), PrivacyRule.me, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
+                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.point, 50), PrivacyRule.me, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
             }
         });
 

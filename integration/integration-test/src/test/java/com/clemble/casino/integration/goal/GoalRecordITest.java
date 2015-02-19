@@ -13,7 +13,6 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
@@ -31,9 +30,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -48,13 +45,13 @@ public class GoalRecordITest {
     GoalConfiguration CONFIGURATION = new GoalConfiguration(
         "basic",
         "Basic",
-        new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)),
+        new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         PrivacyRule.me,
-        new GoalRoleConfiguration(new Bet(Money.create(Currency.FakeMoney, 500), Money.create(Currency.FakeMoney, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.EMPTY
     );
 
