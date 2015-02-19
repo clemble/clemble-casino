@@ -6,6 +6,7 @@ import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.tag.TagAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.joda.time.DateTimeZone;
 
 import java.util.Set;
 
@@ -22,6 +23,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     final private String player;
     final private Set<String> supporters;
     final private String goal;
+    final private DateTimeZone timezone;
     final private String tag;
 
     @JsonCreator
@@ -30,9 +32,11 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         @JsonProperty("player") String player,
         @JsonProperty("supporters") Set<String> supporters,
         @JsonProperty("goal") String goal,
+        @JsonProperty("timezone") DateTimeZone timezone,
         @JsonProperty("tag") String tag) {
         this.goalKey = goalKey;
         this.goal = goal;
+        this.timezone = timezone;
         this.supporters = supporters;
         this.player = player;
         this.tag = tag;
@@ -56,6 +60,11 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     @Override
     public String getGoal() {
         return goal;
+    }
+
+    @Override
+    public DateTimeZone getTimezone() {
+        return timezone;
     }
 
     @Override

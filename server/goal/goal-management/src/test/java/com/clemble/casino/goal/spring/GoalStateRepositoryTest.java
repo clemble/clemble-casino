@@ -9,6 +9,7 @@ import com.clemble.casino.lifecycle.management.event.action.Action;
 import com.clemble.casino.payment.Bank;
 import com.clemble.test.random.ObjectGenerator;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +41,7 @@ public class GoalStateRepositoryTest {
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(Bank.class),
             ObjectGenerator.generate(String.class),
+            DateTimeZone.UTC,
             ObjectGenerator.generate(String.class),
             ObjectGenerator.generate(GoalConfiguration.class),
             new GoalContext(null, Collections.emptyList()),

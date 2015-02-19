@@ -55,6 +55,7 @@ public class ShortGoalManagerFactory implements GoalManagerFactory {
             initiation.getPlayer(),
             record.getBank(),
             initiation.getGoal(),
+            initiation.getTimezone(),
             initiation.getTag(),
             initiation.getConfiguration(),
             goalContext,

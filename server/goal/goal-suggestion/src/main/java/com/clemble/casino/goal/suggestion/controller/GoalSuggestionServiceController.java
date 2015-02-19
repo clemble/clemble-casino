@@ -94,6 +94,7 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
         GoalSuggestion suggestion = new GoalSuggestion(
             keyGenerator.generate(player),
             suggestionRequest.getGoal(),
+            suggestionRequest.getTimezone(),
             TagUtils.getTag(suggestionRequest.getGoal()),
             player,
             suggester,
