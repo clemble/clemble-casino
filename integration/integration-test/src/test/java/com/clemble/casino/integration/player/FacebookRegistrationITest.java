@@ -120,7 +120,7 @@ public class FacebookRegistrationITest {
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;
-        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", profile.getSocialConnection("facebook").getProviderUserId())));
+        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", profile.getSocialConnection(SocialProvider.facebook).getProviderUserId())));
     }
 
     @Test
@@ -133,7 +133,7 @@ public class FacebookRegistrationITest {
         assertNotNull(profile);
         assertTrue(profile instanceof PlayerProfile);
         PlayerProfile socialProfile = (PlayerProfile) profile;
-        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", profile.getSocialConnection("facebook").getProviderUserId())));
+        assertTrue(socialProfile.getSocialConnections().contains(new ConnectionKey("facebook", profile.getSocialConnection(SocialProvider.facebook).getProviderUserId())));
         // Step 3. Registering again with the same SocialAccessGrant
         ClembleCasinoOperations B = playerScenarios.createPlayer(accessGrant);
         assertNotEquals(B, A);
