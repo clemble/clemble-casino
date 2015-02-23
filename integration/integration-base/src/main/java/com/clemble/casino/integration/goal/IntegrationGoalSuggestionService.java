@@ -2,6 +2,7 @@ package com.clemble.casino.integration.goal;
 
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestion;
 import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionRequest;
+import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionResponse;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalSuggestionService;
 import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceController;
 
@@ -51,8 +52,8 @@ public class IntegrationGoalSuggestionService implements GoalSuggestionService {
     }
 
     @Override
-    public GoalSuggestion reply(String goalKey, boolean accept) {
-        return suggestionService.reply(player, goalKey, accept);
+    public GoalSuggestion reply(String goalKey, GoalSuggestionResponse response) {
+        return suggestionService.reply(player, goalKey, response);
     }
 
 }

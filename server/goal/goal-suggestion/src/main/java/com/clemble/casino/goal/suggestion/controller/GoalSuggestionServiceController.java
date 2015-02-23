@@ -1,5 +1,6 @@
 package com.clemble.casino.goal.suggestion.controller;
 
+import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionResponse;
 import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionAcceptedEvent;
 import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionCreatedEvent;
 import com.clemble.casino.goal.lifecycle.construction.event.GoalSuggestionDeclinedEvent;
@@ -98,7 +99,6 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
             TagUtils.getTag(suggestionRequest.getGoal()),
             player,
             suggester,
-            suggestionRequest.getConfiguration(),
             GoalSuggestionState.pending,
             DateTime.now());
         // Step 2. Saving and returning new suggestion
@@ -110,20 +110,20 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
     }
 
     @Override
-    public GoalSuggestion reply(String goalKey, boolean accept) {
+    public GoalSuggestion reply(String goalKey, GoalSuggestionResponse accept) {
         throw new UnsupportedOperationException();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = MY_SUGGESTIONS_GOAL, produces = PRODUCES)
-    public GoalSuggestion reply(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody boolean accept) {
+    public GoalSuggestion reply(@CookieValue("player") String player, @PathVariable("goalKey") String goalKey, @RequestBody GoalSuggestionResponse response) {
         // Step 1. Fetching suggestion
         GoalSuggestion suggestion = suggestionRepository.findOne(goalKey);
         if (!suggestion.getPlayer().equals(player) || suggestion.getState() != GoalSuggestionState.pending)
             throw new IllegalAccessError();
         // Step 2. Changing state
-        if (accept) {
+        if (response.getAccepted()) {
             suggestion = suggestion.copyWithStatus(GoalSuggestionState.accepted);
-            notificationService.send(new SystemGoalInitiationStartedEvent(suggestion.getGoalKey(), suggestion.toInitiation()));
+            notificationService.send(new SystemGoalInitiationStartedEvent(suggestion.getGoalKey(), suggestion.toInitiation(response.getConfiguration())));
             playerNotificationService.send(new GoalSuggestionAcceptedEvent(player, suggestion));
         } else {
             suggestion = suggestion.copyWithStatus(GoalSuggestionState.declined);

@@ -3,10 +3,9 @@ package com.clemble.casino.server.connection.controller;
 import com.clemble.casino.error.ClembleCasinoError;
 import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.Invitation;
-import com.clemble.casino.player.event.PlayerConnectedEvent;
+import com.clemble.casino.player.event.PlayerConnectionAddEvent;
 import com.clemble.casino.player.event.PlayerInvitedConnectionEvent;
 import com.clemble.casino.player.service.PlayerFriendInvitationService;
-import com.clemble.casino.player.service.PlayerNotificationService;
 import com.clemble.casino.server.connection.ServerFriendInvitation;
 import com.clemble.casino.server.connection.repository.PlayerFriendInvitationRepository;
 import com.clemble.casino.server.connection.service.PlayerGraphService;
@@ -96,9 +95,9 @@ public class PlayerFriendInvitationServiceController implements PlayerFriendInvi
             // Step 3.1 It's connection
             connectionService.connect(me, player);
             // Step 3.2 Sending notifications to me
-            notificationService.send(new PlayerConnectedEvent(me, player));
+            notificationService.send(new PlayerConnectionAddEvent(me, player));
             // Step 3.3 Sending notification to player
-            notificationService.send(new PlayerConnectedEvent(player, me));
+            notificationService.send(new PlayerConnectionAddEvent(player, me));
         }
         return invitation.toInvitation();
     }
