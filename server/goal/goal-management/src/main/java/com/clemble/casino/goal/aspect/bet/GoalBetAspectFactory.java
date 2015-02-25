@@ -17,18 +17,18 @@ public class GoalBetAspectFactory implements GenericGoalAspectFactory<GoalChange
     final private PlayerAccountService accountService;
     final private SystemNotificationService notificationService;
 
-    final private GoalBetAspect INSTANCE;
+    final private GoalBetAspect ASPECT;
 
     public GoalBetAspectFactory(PlayerAccountService accountService, SystemNotificationService notificationService) {
         this.accountService = accountService;
         this.notificationService = notificationService;
 
-        this.INSTANCE = new GoalBetAspect(accountService, notificationService);
+        this.ASPECT = new GoalBetAspect(accountService, notificationService);
     }
 
     @Override
     public ClembleAspect<GoalChangedBetEvent> construct(GoalConfiguration configuration, GoalState state) {
-        return INSTANCE;
+        return ASPECT;
     }
 
     @Override

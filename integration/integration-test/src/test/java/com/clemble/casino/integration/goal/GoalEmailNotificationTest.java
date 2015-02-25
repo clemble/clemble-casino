@@ -52,14 +52,14 @@ public class GoalEmailNotificationTest {
         "email:notification:test",
         "Email Notification Test",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
-        LimitedBetRule.create(50, 100),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
+            LimitedBetRule.create(50, 100),
+            70,
             new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
             NoReminderRule.INSTANCE
         ),

@@ -31,16 +31,17 @@ public class GoalBetOffAspect extends GoalAspect<GoalManagementEvent> {
 
     @Override
     protected void doEvent(GoalManagementEvent event) {
+        GoalState state = event.getBody();
+        String goalKey = state.getGoalKey();
         if (event instanceof GoalStartedEvent) {
-            GoalState state = event.getBody();
-            // Step 1. Generating shedule event with bet forbid action
-            SystemEvent scheduleEvent = new SystemAddJobScheduleEvent(state.getGoalKey(), "forbid", new SystemGoalBetOffEvent(state.getGoalKey()), state.getStartDate().plusDays(betDays));
+            // Step 1. Generating schedule event with bet forbid action
+            SystemEvent scheduleEvent = new SystemAddJobScheduleEvent(goalKey, "forbid", new SystemGoalBetOffEvent(goalKey), state.getStartDate().plusDays(betDays));
             // Step 3. Scheduling trigger
             notificationService.send(scheduleEvent);
         } else if (event instanceof GoalEndedEvent) {
             if (event.getBody().getPhase() == GoalPhase.started) {
-                // Step 1. Generating shedule forbid bet event
-                SystemEvent unScheduleEvent = new SystemRemoveJobScheduleEvent(event.getBody().getGoalKey(), "forbid");
+                // Step 1. Generating schedule forbid bet event
+                SystemEvent unScheduleEvent = new SystemRemoveJobScheduleEvent(goalKey, "forbid");
                 // Step 3. Scheduling trigger
                 notificationService.send(unScheduleEvent);
             }

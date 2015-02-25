@@ -49,14 +49,14 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 "week",
                 "Week",
                 new Bet(Money.create(Currency.point, 300), Money.create(Currency.point, 500)),
-                LimitedBetRule.create(50, 100),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
                 new GoalRoleConfiguration(
-                    new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
+                    LimitedBetRule.create(50, 100),
+                    50,
                     NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 ),
@@ -70,7 +70,7 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.of(new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)),
-            ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
+            ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(3, LimitedBetRule.create(50, 100), 50, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
             ImmutableList.of(new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0))
         );
 
@@ -79,14 +79,14 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 "week",
                 "Week",
                 new Bet(Money.create(Currency.point, 0), Money.create(Currency.point, 0)),
-                LimitedBetRule.create(50, 100),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(7)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
                 new GoalRoleConfiguration(
-                    new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
+                    LimitedBetRule.create(50, 100),
+                    50,
                     NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 ),
@@ -120,14 +120,14 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 "week",
                 "Week",
                 new Bet(Money.create(Currency.point, 300), Money.create(Currency.point, 500)),
-                LimitedBetRule.create(50, 100),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
                 new GoalRoleConfiguration(
-                    new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
+                    LimitedBetRule.create(50, 100),
+                    50,
                     NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 ),
@@ -141,7 +141,7 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.of(new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)),
-            ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
+            ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(3, LimitedBetRule.create(50, 100), 50, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
             ImmutableList.of(new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0))
         );
 
@@ -150,14 +150,14 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 "week",
                 "Week",
                 new Bet(Money.create(Currency.point, 0), Money.create(Currency.point, 0)),
-                LimitedBetRule.create(50, 100),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(5))),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.MINUTES.toMillis(35))),
                 new GoalRoleConfiguration(
-                    new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
+                    LimitedBetRule.create(50, 100),
+                    50,
                     NoReminderRule.INSTANCE,
                     NoReminderRule.INSTANCE
                 ),

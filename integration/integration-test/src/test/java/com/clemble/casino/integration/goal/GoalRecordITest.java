@@ -45,12 +45,11 @@ public class GoalRecordITest {
         "basic",
         "Basic",
         new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)),
-        LimitedBetRule.create(50, 100),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(4)),
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
-        new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
+        new GoalRoleConfiguration(3, LimitedBetRule.create(50, 100), 50, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.EMPTY
     );
 

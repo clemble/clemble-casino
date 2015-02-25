@@ -149,14 +149,14 @@ public class GoalFeedTest {
         "forbid",
         "Forbid Test",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
-        LimitedBetRule.create(50, 100),
         NoReminderRule.INSTANCE,
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         new GoalRoleConfiguration(
-            new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             0,
+            LimitedBetRule.create(50, 100),
+            50,
             NoReminderRule.INSTANCE,
             NoReminderRule.INSTANCE
         ),
