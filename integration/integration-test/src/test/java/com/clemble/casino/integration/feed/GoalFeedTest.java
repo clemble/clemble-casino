@@ -71,7 +71,7 @@ public class GoalFeedTest {
         final GoalOperations goalA = A.goalOperations();
         final GoalOperations goalB = B.goalOperations();
         // Step 2. Checking configuration
-        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(1);
+        final GoalConfiguration configuration = goalA.configurationService().getConfigurations().get(0);
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
