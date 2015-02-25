@@ -17,6 +17,7 @@ import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
@@ -52,6 +53,7 @@ public class GoalPhoneNotificationTest {
         "phone:notification:test",
         "Phone Notification Test",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
+        LimitedBetRule.create(50, 100),
         NoReminderRule.INSTANCE,
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(2))),

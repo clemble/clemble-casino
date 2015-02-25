@@ -12,6 +12,7 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
 import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.CountdownBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.PenaltyBreachPunishment;
@@ -42,6 +43,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         "move:loose:punishment",
         "move:loose:punishment",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
+        LimitedBetRule.create(50, 100),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
@@ -59,6 +61,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         "move:penalty:punishment",
         "move:penalty:punishment",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 30)),
+        LimitedBetRule.create(50, 100),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
@@ -76,6 +79,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         "move:countdown:punishment",
         "move:countdown:punishment",
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
+        LimitedBetRule.create(50, 100),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
         new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.point, 10), 100), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
