@@ -27,7 +27,7 @@ public class SystemGoalStartedEventListener implements SystemEventListener<Syste
         if (managerFactory.get(event.getGoalKey()) != null)
             return;
         // Step 1. Send notification to player
-        notificationService.send(event.getInitiation().getConfiguration().getPrivacyRule(), GoalInitiationCompleteEvent.create(event.getInitiation()));
+        notificationService.send(GoalInitiationCompleteEvent.create(event.getInitiation()));
         // Step 2. Start manager for the goal
         managerFactory.start(null, event.getInitiation());
     }

@@ -54,7 +54,6 @@ import com.clemble.casino.lifecycle.configuration.rule.bet.FixedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.bet.UnlimitedBetRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.game.lifecycle.configuration.GameConfiguration;
 import com.clemble.casino.game.lifecycle.configuration.TournamentGameConfiguration;
 import com.clemble.casino.integration.game.NumberState;
@@ -295,7 +294,7 @@ public class IntegrationObjectTest {
         register(TournamentGameConfiguration.class, new AbstractValueGenerator<TournamentGameConfiguration>() {
             @Override
             public TournamentGameConfiguration generate() {
-                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.point, 50), PrivacyRule.me, PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
+                return new TournamentGameConfiguration(Game.pic, "AAA", new Money(Currency.point, 50), PlayerNumberRule.two, RoundGameConfiguration.DEFAULT, null, null, null, null, null);
             }
         });
 

@@ -15,7 +15,6 @@ import com.clemble.casino.integration.utils.CheckUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.CountdownBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.PenaltyBreachPunishment;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
@@ -24,7 +23,6 @@ import com.clemble.casino.lifecycle.management.outcome.PlayerLostOutcome;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.Bank;
-import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +46,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         NoReminderRule.INSTANCE,
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
-        PrivacyRule.world,
         new GoalRoleConfiguration(
             new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
@@ -66,7 +63,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         NoReminderRule.INSTANCE,
         new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
-        PrivacyRule.world,
         new GoalRoleConfiguration(
             new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,
@@ -84,7 +80,6 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         NoReminderRule.INSTANCE,
         new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.point, 10), 100), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(new CountdownBreachPunishment(Money.create(Currency.point, 10), 100), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
-        PrivacyRule.world,
         new GoalRoleConfiguration(
             new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
             3,

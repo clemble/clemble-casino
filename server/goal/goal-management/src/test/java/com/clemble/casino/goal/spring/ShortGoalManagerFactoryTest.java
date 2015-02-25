@@ -11,7 +11,6 @@ import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.goal.repository.GoalRecordRepository;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
@@ -60,7 +59,6 @@ public class ShortGoalManagerFactoryTest {
         new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
-        PrivacyRule.me,
         new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 500), Money.create(Currency.point, 50)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE),
         ShareRule.EMPTY
     );

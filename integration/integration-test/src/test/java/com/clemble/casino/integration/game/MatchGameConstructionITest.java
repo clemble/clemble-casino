@@ -19,7 +19,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.clemble.casino.game.Game;
 import com.clemble.casino.game.lifecycle.configuration.rule.construct.PlayerNumberRule;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.outcome.DrawRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.outcome.WonRule;
 import com.clemble.casino.game.lifecycle.configuration.rule.match.MatchFillRule;
@@ -58,7 +57,7 @@ public class MatchGameConstructionITest {
         configurations.add(configuration);
         configurations.add(configuration);
 
-        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.point, 200), PrivacyRule.world, PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
+        MatchGameConfiguration matchConfiguration = new MatchGameConfiguration(Game.pot, "pot", Money.create(Currency.point, 200), PlayerNumberRule.two, MatchFillRule.maxcommon, new MoveTimeRule(50000, LooseBreachPunishment.getInstance()), new TotalTimeRule(500000, LooseBreachPunishment.getInstance()), WonRule.owned, DrawRule.owned, configurations, null);
 
         System.out.println(objectMapper.writeValueAsString(matchConfiguration));
     }

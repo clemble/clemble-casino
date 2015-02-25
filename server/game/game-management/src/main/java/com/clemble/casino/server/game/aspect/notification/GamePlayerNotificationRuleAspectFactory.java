@@ -14,6 +14,8 @@ import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.player.PlayerAwareUtils;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 
+import java.util.List;
+
 public class GamePlayerNotificationRuleAspectFactory implements GenericGameAspectFactory<GameManagementEvent> {
 
     final private ServerNotificationService notificationService;
@@ -24,14 +26,9 @@ public class GamePlayerNotificationRuleAspectFactory implements GenericGameAspec
 
     @Override
     public GameAspect<GameManagementEvent> construct(GameConfiguration configuration, GameState state) {
-        switch (configuration.getPrivacyRule()) {
-            case world:
-                return new GamePublicNotificationRuleAspect(state.getContext().getSessionKey(), PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
-            case me:
-                return new GamePrivateNotificationRuleAspect(PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts()), notificationService);
-            default:
-                throw ClembleCasinoException.withKey(ClembleCasinoError.GameSpecificationInvalid, state.getContext().getSessionKey());
-        }
+        String sessionKey = state.getContext().getSessionKey();
+        List<String> players = PlayerAwareUtils.toPlayerList(state.getContext().getPlayerContexts());
+        return new GamePublicNotificationRuleAspect(sessionKey, players, notificationService);
     }
 
     @Override

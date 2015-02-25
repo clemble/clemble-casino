@@ -14,7 +14,6 @@ import com.clemble.casino.goal.lifecycle.configuration.rule.reminder.ReminderRul
 import com.clemble.casino.goal.lifecycle.configuration.rule.share.ShareRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.breach.PenaltyBreachPunishment;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.EODTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
@@ -53,7 +52,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
-                PrivacyRule.me,
                 new GoalRoleConfiguration(
                     new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
@@ -70,7 +68,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.of(new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)),
-            ImmutableList.of(new GoalRuleValue<PrivacyRule>(PrivacyRule.me, 0)),
             ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
             ImmutableList.of(new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0))
         );
@@ -84,7 +81,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(7)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
-                PrivacyRule.me,
                 new GoalRoleConfiguration(
                     new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
@@ -97,12 +93,10 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             50,
             30,
             ImmutableList.<IntervalGoalRule>of(
-                new IntervalGoalRule(PrivacyRule.friends, 50, 10),
-                new IntervalGoalRule(PrivacyRule.world, 50, 12),
-                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(2)), 50, 15),
-                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 50, 20),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 50, 15),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 50, 20)
+                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(2)), 100, 15),
+                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 100, 20),
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 200, 15),
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 200, 20)
             )
         );
 
@@ -125,7 +119,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(1)),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new EODTimeoutCalculator(7)),
-                PrivacyRule.me,
                 new GoalRoleConfiguration(
                     new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
@@ -142,7 +135,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.of(new GoalRuleValue<TimeoutRule>(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(4)), 0)),
             ImmutableList.of(new GoalRuleValue<ReminderRule>(new BasicReminderRule(TimeUnit.HOURS.toMillis(2)), 0)),
-            ImmutableList.of(new GoalRuleValue<PrivacyRule>(PrivacyRule.me, 0)),
             ImmutableList.of(new GoalRuleValue<GoalRoleConfiguration>(new GoalRoleConfiguration(new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 130)), 3, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 10)),
             ImmutableList.of(new GoalRuleValue<ShareRule>(ShareRule.EMPTY, 0))
         );
@@ -156,7 +148,6 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
                 new BasicReminderRule(TimeUnit.HOURS.toMillis(2)),
                 new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(5))),
                 new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.MINUTES.toMillis(35))),
-                PrivacyRule.me,
                 new GoalRoleConfiguration(
                     new Bet(Money.create(Currency.point, 50), Money.create(Currency.point, 70)),
                     3,
@@ -169,12 +160,10 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             50,
             30,
             ImmutableList.<IntervalGoalRule>of(
-                new IntervalGoalRule(PrivacyRule.friends, 50, 10),
-                new IntervalGoalRule(PrivacyRule.world, 50, 12),
-                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(3))), 50, 15),
-                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(2))), 50, 20),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 50, 15),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 50, 20)
+                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(3))), 100, 15),
+                new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(2))), 100, 20),
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 200, 15),
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 200, 20)
             )
         );
 

@@ -1,7 +1,6 @@
 package com.clemble.casino.server.player.notification;
 
 import com.clemble.casino.event.Event;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.notification.PlayerNotificationConvertible;
 import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.player.service.PlayerNotificationService;
@@ -44,19 +43,6 @@ abstract class AbstractServerNotificationService implements ServerNotificationSe
         return fullSuccess;
     }
 
-    final public <T extends PlayerAware & Event> boolean send(PrivacyRule privacyRule, T event) {
-        boolean sendResult = doSend(event.getPlayer(), event);
-        // Check 1. Event is convertible to notification
-        if (event instanceof PlayerNotificationConvertible && !PlayerAware.DEFAULT_PLAYER.equals(event.getPlayer())) {
-            systemNotificationService.send(new SystemNotificationAddEvent(privacyRule, ((PlayerNotificationConvertible) event).toNotification()));
-        }
-        // Check 2. Event is convertible to post
-        if (event instanceof PlayerPostConvertible && !PlayerAware.DEFAULT_PLAYER.equals(event.getPlayer())) {
-            systemNotificationService.send(new SystemPostAddEvent(((PlayerPostConvertible) event).toPost()));
-        }
-        return sendResult;
-    }
-
     @Override
     final public <T extends Event> boolean send(final Collection<String> players, final Collection<? extends T> events) {
         // Step 1. Notifying each event one after another
@@ -70,8 +56,13 @@ abstract class AbstractServerNotificationService implements ServerNotificationSe
     final public <T extends Event> boolean send(String player, T event) {
         LOG.trace("Sending {} to {}", event, player);
         // Step 1. Adding to notifications player
-        if(event instanceof PlayerNotificationConvertible) {
-            systemNotificationService.send(new SystemNotificationAddEvent(PrivacyRule.me, ((PlayerNotificationConvertible) event).toNotification()));
+        // Check 1. Event is convertible to notification
+        if (event instanceof PlayerNotificationConvertible && !PlayerAware.DEFAULT_PLAYER.equals(player)) {
+            systemNotificationService.send(new SystemNotificationAddEvent(((PlayerNotificationConvertible) event).toNotification()));
+        }
+        // Check 2. Event is convertible to post
+        if (event instanceof PlayerPostConvertible && !PlayerAware.DEFAULT_PLAYER.equals(player)) {
+            systemNotificationService.send(new SystemPostAddEvent(((PlayerPostConvertible) event).toPost()));
         }
         // Step 2. Do send notification
         return doSend(player, event);

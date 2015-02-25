@@ -62,7 +62,7 @@ public class ServerGoalInitiationService implements GoalInitiationService {
         initiationRepository.save(initiation);
         // Step 3. Sending notification to the players, that they need to confirm
         LOG.debug("Notifying player {}", initiation);
-        notificationService.send(initiation.getConfiguration().getPrivacyRule(), GoalInitiationCreatedEvent.create(initiation));
+        notificationService.send(GoalInitiationCreatedEvent.create(initiation));
         // Step 4. Freezing amount for a player
         LOG.debug("Freezing amount for a player {}", initiation.getPlayer());
         Money amount = initiation.getConfiguration().getBet().getAmount();

@@ -40,24 +40,11 @@ public class SystemNotificationAddEventListener implements SystemEventListener<S
             return;
         PlayerNotification notification = event.getNotification();
         // Step 1. Generating new notifications list
-        Collection<PlayerNotification> notifications = new ArrayList<>();
-        notifications.add(notification);
-        // Step 2. Adding to other players notificaitons
-        switch (event.getPrivacyRule()) {
-            case me:
-                break;
-            case friends:
-            case world:
-                Set<String> connections = connectionService.getConnections(notification.getPlayer());
-                for(String connection: connections) {
-                    notifications.add(notification);
-                }
-                break;
-        }
+        notificationRepository.save(notification);
+        // Step 2. Adding to other players notifications
         // Step 3. Saving player notifications
-        notificationRepository.save(notifications);
         // Step 4. Sending notification to all interested parties
-        serverNotificationService.send(PlayerAwareUtils.toPlayerList(notifications), notification);
+        serverNotificationService.send(notification);
     }
 
     @Override

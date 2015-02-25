@@ -29,7 +29,6 @@ import com.clemble.casino.json.ObjectMapperUtils;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
-import com.clemble.casino.lifecycle.configuration.rule.privacy.PrivacyRule;
 import com.clemble.casino.schedule.spring.ScheduleSpringConfiguration;
 import com.clemble.casino.server.email.spring.PlayerEmailSpringConfiguration;
 import com.clemble.casino.server.event.SystemEvent;
@@ -162,7 +161,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 GiveUpRule.all,
                 new MoveTimeRule(2000, LooseBreachPunishment.getInstance()),
                 new TotalTimeRule(4000, LooseBreachPunishment.getInstance()),
-                PrivacyRule.world,
                 PlayerNumberRule.two,
                 VisibilityRule.visible,
                 DrawRule.owned,
@@ -176,7 +174,6 @@ public class IntegrationTestSpringConfiguration implements TestSpringConfigurati
                 Game.pot,
                 "pot",
                 Money.create(Currency.point, 200),
-                PrivacyRule.world,
                 PlayerNumberRule.two,
                 MatchFillRule.none,
                 new MoveTimeRule(50000, LooseBreachPunishment.getInstance()),
