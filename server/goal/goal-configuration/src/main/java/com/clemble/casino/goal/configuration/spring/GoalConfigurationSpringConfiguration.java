@@ -98,10 +98,10 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.<IntervalGoalRule>of(
                 new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new EODTimeoutCalculator(2)), 100, 15),
                 new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new EODTimeoutCalculator(1)), 100, 20),
+                new IntervalGoalRule(new GoalRoleConfiguration(3, LimitedBetRule.create(100, 200), 60, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 100, 20),
+                new IntervalGoalRule(new GoalRoleConfiguration(3, LimitedBetRule.create(150, 250), 70, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 100, 20),
                 new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 100, 15),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 100, 20),
-                new IntervalGoalRule(LimitedBetRule.create(100, 200), 100, 20),
-                new IntervalGoalRule(LimitedBetRule.create(150, 250), 100, 20)
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 100, 20)
             )
         );
 
@@ -169,10 +169,10 @@ public class GoalConfigurationSpringConfiguration implements SpringConfiguration
             ImmutableList.<IntervalGoalRule>of(
                 new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(3))), 100, 15),
                 new IntervalGoalRule(new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 20)), new MoveTimeoutCalculator(TimeUnit.MINUTES.toMillis(2))), 100, 20),
+                new IntervalGoalRule(new GoalRoleConfiguration(3, LimitedBetRule.create(100, 200), 60, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 100, 20),
+                new IntervalGoalRule(new GoalRoleConfiguration(3, LimitedBetRule.create(150, 250), 70, NoReminderRule.INSTANCE, NoReminderRule.INSTANCE), 100, 20),
                 new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.twitter)), 100, 15),
-                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 100, 20),
-                new IntervalGoalRule(LimitedBetRule.create(100, 200), 100, 20),
-                new IntervalGoalRule(LimitedBetRule.create(150, 250), 100, 20)
+                new IntervalGoalRule(new ShareRule(ImmutableSet.of(SocialProvider.facebook)), 100, 20)
             )
         );
 
