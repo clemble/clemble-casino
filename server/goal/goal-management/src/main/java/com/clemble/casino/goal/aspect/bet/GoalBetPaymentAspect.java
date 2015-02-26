@@ -2,6 +2,8 @@ package com.clemble.casino.goal.aspect.bet;
 
 import com.clemble.casino.bet.PlayerBet;
 import com.clemble.casino.client.event.EventTypeSelector;
+import com.clemble.casino.error.ClembleCasinoError;
+import com.clemble.casino.error.ClembleCasinoException;
 import com.clemble.casino.goal.aspect.GoalAspect;
 import com.clemble.casino.goal.lifecycle.management.event.GoalChangedBetEvent;
 import com.clemble.casino.money.Money;
@@ -21,12 +23,12 @@ import java.util.Set;
 /**
  * Created by mavarazy on 1/17/15.
  */
-public class GoalBetAspect extends GoalAspect<GoalChangedBetEvent> {
+public class GoalBetPaymentAspect extends GoalAspect<GoalChangedBetEvent> {
 
     final private PlayerAccountService accountService;
     final private SystemNotificationService notificationService;
 
-    public GoalBetAspect(
+    public GoalBetPaymentAspect(
         PlayerAccountService accountService,
         SystemNotificationService notificationService) {
         super(new EventTypeSelector(GoalChangedBetEvent.class));
@@ -42,7 +44,7 @@ public class GoalBetAspect extends GoalAspect<GoalChangedBetEvent> {
         // Step 2. Checking player can afford this bid
         boolean canAfford = accountService.canAfford(Collections.singleton(playerBid.getPlayer()), amount.getCurrency(), amount.getAmount()).isEmpty();
         if (!canAfford)
-            throw new IllegalArgumentException();
+            throw ClembleCasinoException.fromError(ClembleCasinoError.AccountInsufficientAmount);
         // Step 3. Sending freeze request
         Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
             new PaymentOperation(playerBid.getPlayer(), amount, Operation.Credit),

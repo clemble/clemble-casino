@@ -12,18 +12,18 @@ import org.springframework.core.Ordered;
 /**
  * Created by mavarazy on 1/17/15.
  */
-public class GoalBetAspectFactory implements GenericGoalAspectFactory<GoalChangedBetEvent> {
+public class GoalBetPaymentAspectFactory implements GenericGoalAspectFactory<GoalChangedBetEvent> {
 
     final private PlayerAccountService accountService;
     final private SystemNotificationService notificationService;
 
-    final private GoalBetAspect ASPECT;
+    final private GoalBetPaymentAspect ASPECT;
 
-    public GoalBetAspectFactory(PlayerAccountService accountService, SystemNotificationService notificationService) {
+    public GoalBetPaymentAspectFactory(PlayerAccountService accountService, SystemNotificationService notificationService) {
         this.accountService = accountService;
         this.notificationService = notificationService;
 
-        this.ASPECT = new GoalBetAspect(accountService, notificationService);
+        this.ASPECT = new GoalBetPaymentAspect(accountService, notificationService);
     }
 
     @Override

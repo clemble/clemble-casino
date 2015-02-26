@@ -3,7 +3,7 @@ package com.clemble.casino.goal.spring;
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
 import com.clemble.casino.goal.aspect.GenericGoalAspectFactory;
 import com.clemble.casino.goal.aspect.ShortGoalAspectFactory;
-import com.clemble.casino.goal.aspect.bet.GoalBetAspectFactory;
+import com.clemble.casino.goal.aspect.bet.GoalBetPaymentAspectFactory;
 import com.clemble.casino.goal.aspect.bet.GoalBetOffAspectFactory;
 import com.clemble.casino.goal.aspect.notification.GoalPlayerNotificationAspectFactory;
 import com.clemble.casino.goal.aspect.notification.SystemGoalReachedNotificationAspectFactory;
@@ -120,10 +120,10 @@ public class GoalManagementSpringConfiguration implements SpringConfiguration {
     }
 
     @Bean
-    public GoalBetAspectFactory goalBetAspectFactory(
+    public GoalBetPaymentAspectFactory goalBetAspectFactory(
         @Qualifier("playerAccountClient") PlayerAccountService accountService,
         SystemNotificationService notificationService) {
-        return new GoalBetAspectFactory(accountService, notificationService);
+        return new GoalBetPaymentAspectFactory(accountService, notificationService);
     }
 
     @Bean
