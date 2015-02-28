@@ -45,7 +45,7 @@ public class PlayerFeedServiceController implements PlayerFeedService {
     public PlayerPost[] myFeed(@CookieValue("player") String player) {
         // Step 1. Searching for connections
         Collection<String> connections = new ArrayList<String>(connectionService.getConnections(player));
-        // connections.add(player);
+        connections.add(player);
         // Step 2. Fetching player connections
         return postRepository.findByPlayerInOrderByCreatedDesc(connections).toArray(new PlayerPost[0]);
     }
