@@ -22,6 +22,7 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
+import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
 import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -106,7 +107,7 @@ public class GoalPhoneNotificationTest {
             A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null &&
             A.goalOperations().actionService().getState(constructionA.getGoalKey()) != null
         );
-        B.goalOperations().actionService().process(constructionA.getGoalKey(), new BidAction());
+        B.goalOperations().actionService().process(constructionA.getGoalKey(), new BetAction(100));
         // Step 5. Starting goal A
         A.goalOperations().initiationService().confirm(constructionA.getGoalKey());
         // Step 6. Checking value

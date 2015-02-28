@@ -20,6 +20,7 @@ import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishm
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
+import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
 import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
@@ -76,7 +77,7 @@ public class GoalFeedTest {
         // Step 4. Checking post appeared in player feed
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Bidding on goal appeared
-        goalB.actionService().process(constructionA.getGoalKey(), new BidAction());
+        goalB.actionService().process(constructionA.getGoalKey(), new BetAction(100 ));
         // Step 6. Checking bid appeared
         Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetPost));
     }
