@@ -13,6 +13,7 @@ import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionState;
 import com.clemble.casino.goal.lifecycle.construction.service.GoalSuggestionService;
 import com.clemble.casino.goal.suggestion.repository.GoalSuggestionRepository;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationStartedEvent;
+import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
 import com.clemble.casino.tag.TagUtils;

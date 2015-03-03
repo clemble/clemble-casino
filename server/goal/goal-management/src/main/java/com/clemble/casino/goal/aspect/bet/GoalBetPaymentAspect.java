@@ -46,11 +46,7 @@ public class GoalBetPaymentAspect extends GoalAspect<GoalChangedBetEvent> {
         if (!canAfford)
             throw ClembleCasinoException.fromError(ClembleCasinoError.AccountInsufficientAmount);
         // Step 3. Sending freeze request
-        Set<PaymentOperation> operations = ImmutableSet.<PaymentOperation>of(
-            new PaymentOperation(playerBid.getPlayer(), amount, Operation.Credit),
-            new PaymentOperation(PlayerAware.DEFAULT_PLAYER, amount, Operation.Debit)
-        );
-        SystemEvent freezeRequest = new SystemPaymentFreezeRequestEvent(new PendingTransaction(event.getBody().getGoalKey(), operations, null));
+        SystemEvent freezeRequest = SystemPaymentFreezeRequestEvent.create(event.getBody().getGoalKey(), playerBid.getPlayer(), amount);
         notificationService.send(freezeRequest);
     }
 }
