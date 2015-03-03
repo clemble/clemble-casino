@@ -11,6 +11,8 @@ import com.clemble.casino.game.event.GameEvent;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.GameScenarios;
 import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
+import com.clemble.test.concurrent.AsyncCompletionUtils;
+import com.clemble.test.concurrent.Check;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,8 +57,18 @@ public class GameWatcherITest {
         A.waitForEnd();
         B.syncWith(A);
 
-        assertFalse(B.isAlive());
-        assertFalse(A.isAlive());
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return !B.isAlive();
+            }
+        }, 5_000);
+        AsyncCompletionUtils.check(new Check() {
+            @Override
+            public boolean check() {
+                return !A.isAlive();
+            }
+        }, 5_000);
 
         PlayerWonOutcome wonOutcome = (PlayerWonOutcome) B.getOutcome();
         assertEquals(wonOutcome.getPlayer(), A.playerOperations().getPlayer());
