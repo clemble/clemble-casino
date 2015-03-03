@@ -56,23 +56,6 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
     }
 
     @Override
-    public List<GoalSuggestion> listMySuggested() {
-        throw new UnsupportedOperationException();
-    }
-
-    @RequestMapping(method = RequestMethod.GET, value = MY_SUGGESTED, produces = PRODUCES)
-    public List<GoalSuggestion> listMySuggested(@CookieValue("player") String player) {
-        return suggestionRepository.findBySuggesterOrderByCreatedDesc(player);
-    }
-
-
-    @Override
-    @RequestMapping(method = RequestMethod.GET, value = PLAYER_SUGGESTED, produces = PRODUCES)
-    public List<GoalSuggestion> listSuggested(@PathVariable("player") String player) {
-        return suggestionRepository.findBySuggesterOrderByCreatedDesc(player);
-    }
-
-    @Override
     @RequestMapping(method = RequestMethod.GET, value = PLAYER_SUGGESTIONS, produces = PRODUCES)
     public List<GoalSuggestion> list(@PathVariable("player") String player) {
         return suggestionRepository.findByPlayerAndStateOrderByCreatedDesc(player, GoalSuggestionState.pending);
