@@ -113,8 +113,8 @@ public class GoalSuggestionServiceController implements GoalSuggestionService {
             suggestion = suggestion.copyWithStatus(GoalSuggestionState.declined);
             playerNotificationService.send(new GoalSuggestionDeclinedEvent(player, suggestion));
         }
-        // Step 3. Saving new suggestion state
-        suggestion = suggestionRepository.save(suggestion);
+        // Step 3. Removing invalid suggestion
+        suggestionRepository.delete(suggestion);
         // Step 4. Sending notification, to user
         return suggestion;
     }
