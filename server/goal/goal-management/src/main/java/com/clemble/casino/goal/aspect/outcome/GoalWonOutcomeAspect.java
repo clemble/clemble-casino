@@ -46,7 +46,7 @@ public class GoalWonOutcomeAspect
         PaymentTransaction paymentTransaction = new PaymentTransaction()
             .setTransactionKey(event.getBody().getGoalKey())
             .setTransactionDate(DateTime.now(DateTimeZone.UTC))
-            .setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
+            .setSource(GoalPaymentSource.create(event));
         // Step 2. Processing payment transaction
         for(PlayerBet playerBid: bets) {
             paymentTransaction.

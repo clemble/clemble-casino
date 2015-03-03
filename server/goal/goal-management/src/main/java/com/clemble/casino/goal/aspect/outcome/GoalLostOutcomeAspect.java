@@ -7,6 +7,7 @@ import com.clemble.casino.client.event.EventTypeSelector;
 import com.clemble.casino.client.event.OutcomeTypeSelector;
 import com.clemble.casino.goal.GoalPaymentSource;
 import com.clemble.casino.goal.aspect.GoalAspect;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.lifecycle.management.outcome.PlayerLostOutcome;
 import com.clemble.casino.money.Operation;
@@ -37,13 +38,14 @@ public class GoalLostOutcomeAspect
 
     @Override
     protected void doEvent(GoalEndedEvent event) {
+        GoalState state = event.getBody();
         Collection<PlayerBet> bets = event.getBody().getBank().getBets();
         // Step 1. Generating payment transaction
         // Account already balanced need to remove pending operation
         PaymentTransaction paymentTransaction = new PaymentTransaction().
             setTransactionKey(event.getBody().getGoalKey()).
             setTransactionDate(DateTime.now()).
-            setSource(new GoalPaymentSource(event.getBody().getGoalKey(), event.getOutcome()));
+            setSource(GoalPaymentSource.create(event));
         // Step 3. Generating bid transaction
         for(PlayerBet playerBid: bets) {
             paymentTransaction.

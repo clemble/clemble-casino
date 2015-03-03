@@ -47,7 +47,7 @@ public class PlayerNotificationSpringConfigurationTest {
             "B",
             Money.create(Currency.DEFAULT, 50),
             Operation.Credit,
-            new GoalPaymentSource("goal", new NoOutcome()),
+            new GoalPaymentSource("goalKey", "player", "goal", new NoOutcome()),
             DateTime.now(DateTimeZone.UTC));
         PlayerConnectedNotification connectedNotification = new PlayerConnectedNotification("AB", "B", "F", DateTime.now(DateTimeZone.UTC));
         // Step 2. Save notification
