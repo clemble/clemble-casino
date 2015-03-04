@@ -45,7 +45,7 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 50)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
-        new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
+        new TimeoutRule(LooseBreachPunishment.getInstance(), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         new TimeoutRule(LooseBreachPunishment.getInstance(), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         new GoalRoleConfiguration(
             3,
@@ -60,10 +60,10 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
     final private GoalConfiguration PENALTY_PUNISHMENT = new GoalConfiguration(
         "move:penalty:punishment",
         "move:penalty:punishment",
-        new Bet(Money.create(Currency.point, 100), Money.create(Currency.point, 30)),
+        new Bet(Money.create(Currency.point, 30), Money.create(Currency.point, 20)),
         new BasicReminderRule(TimeUnit.SECONDS.toMillis(1)),
         NoReminderRule.INSTANCE,
-        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(1))),
+        new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new MoveTimeoutCalculator(TimeUnit.SECONDS.toMillis(3))),
         new TimeoutRule(new PenaltyBreachPunishment(Money.create(Currency.point, 10)), new TotalTimeoutCalculator(TimeUnit.HOURS.toMillis(3))),
         new GoalRoleConfiguration(
             3,
@@ -123,7 +123,10 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         // Step 3. Checking AC
         boolean check = CheckUtils.check((i) -> !originalBank.equals(A.goalOperations().actionService().getState(AC.getGoalKey()).getBank()));
         Assert.assertTrue(check);
-        // Step 4. Checking loosing after money expires
+        // Step 4. Checking penalty due to move timeout
+        boolean checkPenalized = CheckUtils.check((i) -> A.goalOperations().actionService().getState(AC.getGoalKey()).getBank().getPenalty().getAmount() != 0);
+        Assert.assertTrue(checkPenalized);
+        // Step 5. Checking loosing after money expires
         Outcome expected = new PlayerLostOutcome(A.getPlayer());
         boolean checkLoose = CheckUtils.check((i) -> expected.equals(A.goalOperations().recordService().get(AC.getGoalKey()).getOutcome()));
         Assert.assertTrue(checkLoose);
