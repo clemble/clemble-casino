@@ -13,12 +13,11 @@ import com.clemble.casino.goal.post.GoalStartedPost;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.player.Invitation;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.share.SystemSharePostEvent;
 import com.clemble.casino.social.SocialProvider;
-import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +50,7 @@ public class GoalFeedShareTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Checking share works
         GoalStartedPost post = (GoalStartedPost) B.feedService().myFeed()[0];
         Assert.assertNotNull(post);

@@ -10,12 +10,11 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.lifecycle.management.event.action.surrender.GiveUpAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.payment.event.PaymentCompleteEvent;
-import org.joda.time.DateTimeZone;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +40,7 @@ public class GoalSurrenderITest {
         final GoalConfiguration Aconf = AgoalOps.configurationService().getConfigurations().get(0);
         final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", "UTC"));
         final String goalKey = AgoalConst.getGoalKey();
-        CheckUtils.check((i) -> AgoalOps.actionService().getState(goalKey) != null);
+        AsyncUtils.check((i) -> AgoalOps.actionService().getState(goalKey) != null);
         EventAccumulator<PaymentCompleteEvent> paymentAccumulator = new EventAccumulator<PaymentCompleteEvent>();
         A.listenerOperations().subscribe(new EventTypeSelector(PaymentCompleteEvent.class), paymentAccumulator);
         // Step 3. Checking value before give up

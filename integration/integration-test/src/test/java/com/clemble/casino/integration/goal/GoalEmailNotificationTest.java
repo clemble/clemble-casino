@@ -16,14 +16,13 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.event.EventAccumulator;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
 import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
-import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.server.event.SystemEvent;
@@ -105,9 +104,9 @@ public class GoalEmailNotificationTest {
         final GoalConstructionRequest requestA = new GoalConstructionRequest(CONFIGURATION, "Test email notification", "UTC");
         final GoalConstruction constructionA = A.goalOperations().constructionService().construct(requestA);
         // Step 4. Checking Requests
-        CheckUtils.check((i) ->
-            A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null &&
-            A.goalOperations().actionService().getState(constructionA.getGoalKey()) != null
+        AsyncUtils.check((i) ->
+                A.goalOperations().initiationService().get(constructionA.getGoalKey()) != null &&
+                    A.goalOperations().actionService().getState(constructionA.getGoalKey()) != null
         );
         B.goalOperations().actionService().process(constructionA.getGoalKey(), new BetAction(100));
         // Step 5. Checking value

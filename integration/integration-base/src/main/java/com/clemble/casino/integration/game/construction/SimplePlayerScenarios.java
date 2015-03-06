@@ -2,15 +2,12 @@ package com.clemble.casino.integration.game.construction;
 
 import static com.clemble.casino.utils.Preconditions.checkNotNull;
 
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.clemble.casino.integration.event.EventAccumulator;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.registration.PlayerLoginRequest;
-import com.clemble.test.concurrent.AsyncCompletionUtils;
-import com.clemble.test.concurrent.Check;
-import com.clemble.test.concurrent.Get;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.clemble.casino.client.ClembleCasinoOperations;
@@ -106,40 +103,16 @@ public class SimplePlayerScenarios implements PlayerScenarios {
             }
         });
         // Step 1. Checking listener was able to connect
-        AsyncCompletionUtils.check(new Check() {
-            @Override
-            public boolean check() {
-                return player.listenerOperations().isAlive();
-            }
-        }, 5_000);
+        AsyncUtils.check((i) -> player.listenerOperations().isAlive());
         // Step 2. Checking registration && daily bonus received
         final String registrationTransaction = RegistrationBonusPaymentSource.INSTANCE.toTransactionKey(player.getPlayer());
-        AsyncCompletionUtils.check(new Check() {
-            @Override
-            public boolean check() {
-                return player.paymentOperations().getTransaction(registrationTransaction) != null;
-            }
-        }, 15_000);
-        AsyncCompletionUtils.check(new Check() {
-            @Override
-            public boolean check() {
-                return player.paymentOperations().myTransactionsBySource("dailybonus").size() > 0;
-            }
-        }, 15_000);
+        AsyncUtils.check((i) -> player.paymentOperations().getTransaction(registrationTransaction) != null);
+        AsyncUtils.check((i) -> player.paymentOperations().myTransactionsBySource("dailybonus").size() > 0);
         // Step 3. Getting PaymentTransaction
-        AsyncCompletionUtils.get(new Get<PlayerProfile>() {
-            @Override
-            public PlayerProfile get() {
-                return player.profileOperations().myProfile();
-            }
-        }, 5_000);
+        AsyncUtils.checkNotNull((i) -> player.profileOperations().myProfile());
         // Step 4. Getting PlayerConnection
-        AsyncCompletionUtils.get(new Get<Set<String>>() {
-            @Override
-            public Set<String> get() {
-                return player.connectionOperations().myConnections();
-            }
-        }, 15_000);
+        AsyncUtils.checkNotNull((i) -> player.connectionOperations().myConnections());
         return player;
     }
+
 }

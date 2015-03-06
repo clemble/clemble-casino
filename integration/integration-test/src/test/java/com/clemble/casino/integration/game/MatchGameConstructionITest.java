@@ -10,7 +10,7 @@ import java.util.List;
 import com.clemble.casino.game.lifecycle.record.GameRecord;
 import com.clemble.casino.game.lifecycle.configuration.GameConfigurationUtils;
 import com.clemble.casino.integration.ClembleIntegrationTest;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -105,7 +105,7 @@ public class MatchGameConstructionITest {
         assertNotNull(transaction);
 
         // Processing is async, so payment might complete only after certain delay
-        boolean check = CheckUtils.check((test) -> {
+        boolean check = AsyncUtils.check((test) -> {
             Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.point);
             Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.point);
 

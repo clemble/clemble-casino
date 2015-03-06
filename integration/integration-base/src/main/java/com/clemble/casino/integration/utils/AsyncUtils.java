@@ -5,14 +5,18 @@ import java.util.function.Function;
 /**
  * Created by mavarazy on 11/26/14.
  */
-public class CheckUtils {
+public class AsyncUtils {
 
-    private CheckUtils() {
+    private AsyncUtils() {
         throw new IllegalAccessError();
     }
 
     public static boolean check(Function<Integer, Boolean> check) {
-        long timeout = System.currentTimeMillis() + 30_000;
+        return check(check, 30_000);
+    }
+
+    public static boolean check(Function<Integer, Boolean> check, long checkTimeout) {
+        long timeout = System.currentTimeMillis() + checkTimeout;
         int i = 0;
         while(timeout > System.currentTimeMillis()) {
             boolean result = false;
@@ -40,5 +44,24 @@ public class CheckUtils {
                 return false;
             }
         });
+    }
+
+    public static <T> T get(Function<Integer, T> get, long getTimeout) {
+        long timeout = System.currentTimeMillis() + getTimeout;
+        int i = 0;
+        while(timeout > System.currentTimeMillis()) {
+            try {
+                T candidate = get.apply(i++);
+                if (candidate != null)
+                    return candidate;
+            } catch (Throwable throwable) {
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

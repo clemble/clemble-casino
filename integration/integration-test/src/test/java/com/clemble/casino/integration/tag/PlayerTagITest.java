@@ -8,10 +8,9 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.tag.ClembleTag;
 import org.junit.Assert;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,16 +38,16 @@ public class PlayerTagITest {
         GoalConfiguration configuration = Agoal.configurationService().getConfigurations().get(0);
         GoalConstruction construction = Agoal.constructionService().construct(new GoalConstructionRequest(configuration, "#sport goal", "UTC"));
         // Step 4. Checking goal started
-        Assert.assertTrue(CheckUtils.checkNotNull((i) -> Agoal.actionService().getState(construction.getGoalKey())));
+        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> Agoal.actionService().getState(construction.getGoalKey())));
         // Step 5. Sending goal reached event
         Agoal.actionService().process(construction.getGoalKey(), new GoalReachedAction("I'm done"));
         // Step 6. Checking tag added
-        Assert.assertTrue(CheckUtils.check((i) -> {
+        Assert.assertTrue(AsyncUtils.check((i) -> {
             Set<ClembleTag> tags = A.tagService().myTags();
-            if(tags.isEmpty())
+            if (tags.isEmpty())
                 return false;
-            for(ClembleTag tag: tags)
-                if(tag.getPower() == 1 && tag.getTag().equals("sport"))
+            for (ClembleTag tag : tags)
+                if (tag.getPower() == 1 && tag.getTag().equals("sport"))
                     return true;
             return false;
         }));

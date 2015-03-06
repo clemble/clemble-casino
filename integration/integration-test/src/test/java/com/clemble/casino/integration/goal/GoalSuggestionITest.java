@@ -9,7 +9,7 @@ import com.clemble.casino.goal.lifecycle.construction.GoalSuggestionState;
 import com.clemble.casino.goal.lifecycle.construction.notification.GoalSuggestionNotification;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.utils.CollectionUtils;
 import com.google.common.collect.ImmutableList;
 import org.junit.Assert;
@@ -79,7 +79,7 @@ public class GoalSuggestionITest {
         // Step 4. Accepting suggestion
         B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), new GoalSuggestionResponse(configuration, true));
         // Step 5. Checking suggestion in the list of suggestions
-        Assert.assertTrue(CheckUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
+        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
         GoalSuggestion suggestion = CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications()).getSuggestion();
         Assert.assertEquals(GoalSuggestionState.accepted, suggestion.getState());
     }
@@ -100,7 +100,7 @@ public class GoalSuggestionITest {
         // Step 4. Accepting suggestion
         B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), new GoalSuggestionResponse(configuration, false));
         // Step 5. Checking suggestion in the list of suggestions
-        Assert.assertTrue(CheckUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
+        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
         GoalSuggestion suggestion = CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications()).getSuggestion();
         Assert.assertEquals(GoalSuggestionState.declined, suggestion.getState());
     }

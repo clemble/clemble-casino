@@ -5,23 +5,18 @@ import com.clemble.casino.goal.event.action.GoalStatusUpdateAction;
 import com.clemble.casino.goal.lifecycle.configuration.GoalConfiguration;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstruction;
 import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
-import com.clemble.casino.goal.lifecycle.management.event.GoalEndedEvent;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.spring.IntegrationTestSpringConfiguration;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.lifecycle.initiation.InitiationState;
 import com.clemble.test.concurrent.AsyncCompletionUtils;
 import com.clemble.test.concurrent.Check;
 import com.clemble.test.random.ObjectGenerator;
 import org.junit.Assert;
-import org.joda.time.DateTimeZone;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * Created by mavarazy on 1/23/15.
@@ -51,11 +46,11 @@ public class GoalStatusUpdateITest {
         }, 30_000);
         final String newStatus = ObjectGenerator.generate(String.class);
         // Step 4. Checking goal started
-        boolean goalStarted = CheckUtils.checkNotNull((i) -> A.goalOperations().actionService().getState(goalKey));
+        boolean goalStarted = AsyncUtils.checkNotNull((i) -> A.goalOperations().actionService().getState(goalKey));
         Assert.assertTrue(goalStarted);
         A.goalOperations().actionService().process(goalKey, new GoalStatusUpdateAction(newStatus));
         // Step 5. Checking goal
-        boolean goalStatusUpdated = CheckUtils.check((i) -> A.goalOperations().actionService().getState(goalKey).getStatus().equals(newStatus));
+        boolean goalStatusUpdated = AsyncUtils.check((i) -> A.goalOperations().actionService().getState(goalKey).getStatus().equals(newStatus));
         Assert.assertTrue(goalStatusUpdated);
     }
 

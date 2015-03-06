@@ -14,14 +14,13 @@ import com.clemble.casino.goal.lifecycle.construction.GoalConstructionRequest;
 import com.clemble.casino.goal.post.*;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.construction.PlayerScenarios;
-import com.clemble.casino.integration.utils.CheckUtils;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.lifecycle.configuration.rule.bet.LimitedBetRule;
 import com.clemble.casino.lifecycle.configuration.rule.breach.LooseBreachPunishment;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.MoveTimeoutCalculator;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TimeoutRule;
 import com.clemble.casino.lifecycle.configuration.rule.timeout.TotalTimeoutCalculator;
 import com.clemble.casino.lifecycle.management.event.action.bet.BetAction;
-import com.clemble.casino.lifecycle.management.event.action.bet.BidAction;
 import com.clemble.casino.money.Currency;
 import com.clemble.casino.money.Money;
 import com.clemble.casino.player.Invitation;
@@ -56,7 +55,7 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
-        boolean sizeIsOne = CheckUtils.check((i) -> B.feedService().myFeed().length == 1);
+        boolean sizeIsOne = AsyncUtils.check((i) -> B.feedService().myFeed().length == 1);
         Assert.assertTrue(sizeIsOne);
         Assert.assertTrue(B.feedService().myFeed()[0] instanceof GoalStartedPost);
     }
@@ -75,11 +74,11 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Bidding on goal appeared
         goalB.actionService().process(constructionA.getGoalKey(), new BetAction(100 ));
         // Step 6. Checking bid appeared
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetPost));
     }
 
 //    @Test
@@ -119,11 +118,11 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking started event
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalStatusUpdateAction("Update action"));
         // Step 6. Checking post
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalUpdatedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalUpdatedPost));
     }
 
     @Test
@@ -139,11 +138,11 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking started event
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Updating status
         goalA.actionService().process(constructionA.getGoalKey(), new GoalReachedAction("Update action"));
         // Step 6. Checking post
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalReachedPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalReachedPost));
     }
 
     final private GoalConfiguration FORBID_CONFIGURATION = new GoalConfiguration(
@@ -175,7 +174,7 @@ public class GoalFeedTest {
         // Step 3. Creating construction
         goalA.constructionService().construct(new GoalConstructionRequest(FORBID_CONFIGURATION, "Goal A", "UTC"));
         // Step 4. Checking forbid post
-        Assert.assertTrue(CheckUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetOffPost));
+        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalBetOffPost));
     }
 
 }
