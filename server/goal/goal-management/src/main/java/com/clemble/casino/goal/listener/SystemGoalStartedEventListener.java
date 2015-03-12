@@ -1,7 +1,7 @@
 package com.clemble.casino.goal.listener;
 
 import com.clemble.casino.goal.action.GoalManagerFactoryFacade;
-import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCompleteEvent;
+import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCompletedEvent;
 import com.clemble.casino.server.event.goal.SystemGoalStartedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -27,7 +27,7 @@ public class SystemGoalStartedEventListener implements SystemEventListener<Syste
         if (managerFactory.get(event.getGoalKey()) != null)
             return;
         // Step 1. Send notification to player
-        notificationService.send(GoalInitiationCompleteEvent.create(event.getInitiation()));
+        notificationService.send(GoalInitiationCompletedEvent.create(event.getInitiation()));
         // Step 2. Start manager for the goal
         managerFactory.start(null, event.getInitiation());
     }

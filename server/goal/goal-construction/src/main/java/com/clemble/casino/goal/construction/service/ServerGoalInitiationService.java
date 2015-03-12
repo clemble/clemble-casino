@@ -8,10 +8,6 @@ import com.clemble.casino.goal.lifecycle.initiation.GoalInitiation;
 import com.clemble.casino.goal.lifecycle.initiation.event.GoalInitiationCreatedEvent;
 import com.clemble.casino.goal.construction.repository.GoalInitiationRepository;
 import com.clemble.casino.money.Money;
-import com.clemble.casino.money.Operation;
-import com.clemble.casino.payment.PaymentOperation;
-import com.clemble.casino.payment.PendingTransaction;
-import com.clemble.casino.player.PlayerAware;
 import com.clemble.casino.server.event.SystemEvent;
 import com.clemble.casino.server.event.goal.SystemGoalInitiationDueEvent;
 import com.clemble.casino.server.event.payment.SystemPaymentFreezeRequestEvent;
@@ -19,12 +15,10 @@ import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.clemble.casino.server.event.schedule.SystemRemoveJobScheduleEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemNotificationService;
-import com.google.common.collect.ImmutableSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * Created by mavarazy on 9/13/14.

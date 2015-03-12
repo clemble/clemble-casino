@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.clemble.casino.integration</groupId>
         <artifactId>integration</artifactId>
-        <version>0.15.0-SNAPSHOT</version>
+        <version>0.16.0-SNAPSHOT</version>
     </parent>
     <artifactId>integration-test</artifactId>
     <dependencies>
@@ -148,7 +148,7 @@
                             <includes>
                                 <include>**/*ITest.java</include>
                             </includes>
-                            <argLine>-Dspring.profiles.active=int_test</argLine>
+                            <argLine>-Dspring.profiles.active=int_test -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5015</argLine>
                         </configuration>
                     </plugin>
                     <plugin>

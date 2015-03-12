@@ -23,7 +23,7 @@ public class PlayerPhoneSpringConfigurationTest {
 
     @Test
     public void testSMSSend(){
-        smsSender.send("+972525460951", "Test message");
+        smsSender.send("+677989809070951", "Test message");
     }
 
 }

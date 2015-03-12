@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.clemble.casino</groupId>
     <artifactId>parent</artifactId>
-    <version>0.15.0-SNAPSHOT</version>
+    <version>0.16.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
         <module>public</module>
@@ -34,7 +34,7 @@
         <c3p0.version>0.9.1.2</c3p0.version>
         <hibernate.version>4.3.8.Final</hibernate.version>
         <!-- Spring dependencies -->
-        <spring.version>4.1.5.RELEASE</spring.version>
+        <spring.version>4.2.0.BUILD-SNAPSHOT</spring.version>
         <spring.security.oauth2.version>2.0.6.RELEASE</spring.security.oauth2.version>
         <couchbase-client.version>1.4.8</couchbase-client.version>
         <spring-data-mongo.version>1.6.2.RELEASE</spring-data-mongo.version>
@@ -103,27 +103,16 @@
     </properties>
     <repositories>
         <repository>
+            <id>neo4j-releases</id>
+            <url>http://m2.neo4j.org/content/repositories/releases</url>
+        </repository>
+        <repository>
             <id>oss-sonatype</id>
             <name>oss-sonatype</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-        </repository>
-        <repository>
-            <id>org.springframework.maven.milestone</id>
-            <name>Spring Framework Maven Milestone Repository</name>
-            <url>http://maven.spring.io/milestone</url>
-        </repository>
-        <repository>
-            <id>spring-snapshot</id>
-            <name>Spring Maven SNAPSHOT Repository</name>
-            <url>http://repo.spring.io/libs-snapshot</url>
-        </repository>
-        <repository>
-            <id>mavarazy-github</id>
-            <name>Spring Maven SNAPSHOT Repository</name>
-            <url>http://mavarazy.github.io/maven/releases</url>
         </repository>
         <repository>
             <id>spring-snapshots</id>
@@ -161,12 +150,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.clemble.casino.client</groupId>
-                <artifactId>client-common</artifactId>
-                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -853,7 +836,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
                 <configuration>
                     <reportsDirectory>../../../shippable/testresults</reportsDirectory>
                     <argLine>${surefireArgLine}</argLine>
@@ -983,6 +965,11 @@
         </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.18.1</version>
+                </plugin>
                 <plugin>
                     <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                     <artifactId>android-maven-plugin</artifactId>

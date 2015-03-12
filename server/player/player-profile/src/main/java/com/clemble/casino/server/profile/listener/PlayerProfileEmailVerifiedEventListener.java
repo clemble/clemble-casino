@@ -27,6 +27,7 @@ public class PlayerProfileEmailVerifiedEventListener implements SystemEventListe
 
     @Override
     public void onEvent(SystemEmailVerifiedEvent event) {
+        // TODO profile might be missing
         // Step 1. Fetching player profile
         PlayerProfile profile = profileRepository.findOne(event.getPlayer());
         // Step 2. Adding new connection to SocialConnections

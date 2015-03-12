@@ -4,7 +4,7 @@ import com.clemble.casino.server.event.goal.SystemGoalReachedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
 import com.clemble.casino.tag.TagAware;
-import com.clemble.casino.tag.event.ClembleTagAddedEvent;
+import com.clemble.casino.tag.event.TagCreatedEvent;
 import com.clemble.server.tag.ServerPlayerTags;
 import com.clemble.server.tag.repository.ServerPlayerTagsRepository;
 
@@ -41,7 +41,7 @@ public class TagSystemGoalReachedEventListener implements SystemEventListener<Sy
             // Step 2. Add new tag to player tag
             tagsRepository.save(playerTags.add(tag));
             // Step 3. Send notification
-            notificationService.send(player, new ClembleTagAddedEvent(tag));
+            notificationService.send(player, new TagCreatedEvent(tag));
         } catch (OptimisticLockException e) {
             addTag(player, tag);
         }
