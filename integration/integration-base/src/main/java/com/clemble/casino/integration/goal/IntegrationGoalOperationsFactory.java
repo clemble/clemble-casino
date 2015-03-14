@@ -6,6 +6,7 @@ import com.clemble.casino.goal.construction.controller.GoalConstructionServiceCo
 import com.clemble.casino.goal.construction.controller.GoalInitiationServiceController;
 import com.clemble.casino.goal.controller.GoalActionServiceController;
 import com.clemble.casino.goal.controller.GoalRecordServiceController;
+import com.clemble.casino.goal.controller.GoalVictoryServiceController;
 import com.clemble.casino.goal.suggestion.controller.GoalSuggestionServiceController;
 
 /**
@@ -19,6 +20,7 @@ public class IntegrationGoalOperationsFactory {
     final private GoalConstructionServiceController constructionService;
     final private GoalActionServiceController actionService;
     final private GoalRecordServiceController recordService;
+    final private GoalVictoryServiceController victoryService;
 
     public IntegrationGoalOperationsFactory(
         GoalConfigurationServiceController configurationService,
@@ -26,13 +28,15 @@ public class IntegrationGoalOperationsFactory {
         GoalSuggestionServiceController suggestionService,
         GoalConstructionServiceController constructionService,
         GoalActionServiceController actionService,
-        GoalRecordServiceController recordService) {
+        GoalRecordServiceController recordService,
+        GoalVictoryServiceController victoryService) {
         this.configurationService = configurationService;
         this.initiationService = initiationService;
         this.suggestionService = suggestionService;
         this.constructionService = constructionService;
         this.actionService = actionService;
         this.recordService = recordService;
+        this.victoryService = victoryService;
     }
 
     public GoalOperations construct(String player) {
@@ -42,7 +46,8 @@ public class IntegrationGoalOperationsFactory {
             suggestionService,
             constructionService,
             actionService,
-            recordService);
+            recordService,
+            victoryService);
     }
 
 }

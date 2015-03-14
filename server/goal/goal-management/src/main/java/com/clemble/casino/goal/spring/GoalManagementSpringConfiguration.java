@@ -49,7 +49,8 @@ import org.springframework.data.mongodb.repository.support.MongoRepositoryFactor
 @Import({
     CommonSpringConfiguration.class,
     MongoSpringConfiguration.class,
-    PaymentClientSpringConfiguration.class
+    PaymentClientSpringConfiguration.class,
+    GoalVictorySpringConfiguration.class
 })
 public class GoalManagementSpringConfiguration implements SpringConfiguration {
 

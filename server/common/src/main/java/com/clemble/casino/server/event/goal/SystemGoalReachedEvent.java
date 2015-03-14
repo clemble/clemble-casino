@@ -1,45 +1,31 @@
 package com.clemble.casino.server.event.goal;
 
-import com.clemble.casino.goal.GoalDescriptionAware;
-import com.clemble.casino.goal.lifecycle.management.GoalRoleAware;
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.player.PlayerAware;
-import com.clemble.casino.tag.TagAware;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.joda.time.DateTimeZone;
-
-import java.util.Set;
 
 /**
  * Created by mavarazy on 2/3/15.
  *
  * TODO maybe need to generalize this
  */
-public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, GoalDescriptionAware, TagAware, GoalRoleAware {
+public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware {
 
     final public static String CHANNEL = "sys:goal:reached";
 
     final private String goalKey;
     final private String player;
-    final private Set<String> supporters;
-    final private String goal;
-    final private String timezone;
-    final private String tag;
+    final private GoalState state;
 
     @JsonCreator
     public SystemGoalReachedEvent(
         @JsonProperty(GOAL_KEY) String goalKey,
-        @JsonProperty("player") String player,
-        @JsonProperty("supporters") Set<String> supporters,
-        @JsonProperty("goal") String goal,
-        @JsonProperty("timezone") String timezone,
-        @JsonProperty("tag") String tag) {
-        this.goalKey = goalKey;
-        this.goal = goal;
-        this.timezone = timezone;
-        this.supporters = supporters;
+        @JsonProperty(PLAYER) String player,
+        @JsonProperty("state") GoalState state) {
         this.player = player;
-        this.tag = tag;
+        this.goalKey = goalKey;
+        this.state = state;
     }
 
     @Override
@@ -52,24 +38,8 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
         return player;
     }
 
-    @Override
-    public Set<String> getSupporters() {
-        return supporters;
-    }
-
-    @Override
-    public String getGoal() {
-        return goal;
-    }
-
-    @Override
-    public String getTimezone() {
-        return timezone;
-    }
-
-    @Override
-    public String getTag() {
-        return tag;
+    public GoalState getState() {
+        return state;
     }
 
     @Override
@@ -84,7 +54,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
 
         SystemGoalReachedEvent that = (SystemGoalReachedEvent) o;
 
-        if (!goal.equals(that.goal)) return false;
+        if (!state.equals(that.state)) return false;
         if (!goalKey.equals(that.goalKey)) return false;
         if (!player.equals(that.player)) return false;
 
@@ -94,7 +64,7 @@ public class SystemGoalReachedEvent implements SystemGoalEvent, PlayerAware, Goa
     @Override
     public int hashCode() {
         int result = goalKey.hashCode();
-        result = 31 * result + goal.hashCode();
+        result = 31 * result + state.hashCode();
         result = 31 * result + player.hashCode();
         return result;
     }

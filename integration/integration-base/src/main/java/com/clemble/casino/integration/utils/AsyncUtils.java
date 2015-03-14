@@ -1,5 +1,7 @@
 package com.clemble.casino.integration.utils;
 
+import org.junit.Assert;
+
 import java.util.function.Function;
 
 /**
@@ -9,6 +11,10 @@ public class AsyncUtils {
 
     private AsyncUtils() {
         throw new IllegalAccessError();
+    }
+
+    public static void verify(Function<Integer, Boolean> check) {
+        Assert.assertTrue(check(check));
     }
 
     public static boolean check(Function<Integer, Boolean> check) {

@@ -1,5 +1,6 @@
 package com.clemble.server.tag.listener;
 
+import com.clemble.casino.goal.lifecycle.management.GoalState;
 import com.clemble.casino.server.event.goal.SystemGoalReachedEvent;
 import com.clemble.casino.server.player.notification.ServerNotificationService;
 import com.clemble.casino.server.player.notification.SystemEventListener;
@@ -25,11 +26,12 @@ public class TagSystemGoalReachedEventListener implements SystemEventListener<Sy
 
     @Override
     public void onEvent(SystemGoalReachedEvent event) {
+        GoalState state = event.getState();
         // Step 1. Adding tags for victory
-        addTag(event.getPlayer(), event.getTag());
+        addTag(event.getPlayer(), state.getTag());
         addTag(event.getPlayer(), TagAware.VICTORY_TAG);
         // Step 2. Adding tags for support
-        for(String supporter: event.getSupporters()) {
+        for(String supporter: state.getSupporters()) {
             addTag(supporter, TagAware.SUPPORTER_TAG);
         }
     }
@@ -47,8 +49,6 @@ public class TagSystemGoalReachedEventListener implements SystemEventListener<Sy
         }
     }
 
-
-
     @Override
     public String getChannel() {
         return SystemGoalReachedEvent.CHANNEL;
@@ -58,4 +58,5 @@ public class TagSystemGoalReachedEventListener implements SystemEventListener<Sy
     public String getQueueName() {
         return SystemGoalReachedEvent.CHANNEL + " > tag";
     }
+
 }
