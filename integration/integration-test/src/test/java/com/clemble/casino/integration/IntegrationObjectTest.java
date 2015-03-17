@@ -37,6 +37,8 @@ import com.clemble.casino.game.lifecycle.management.unit.GameUnit;
 import com.clemble.casino.lifecycle.configuration.rule.ConfigurationRule;
 import com.clemble.casino.player.notification.PlayerConnectedNotification;
 import com.clemble.casino.post.PlayerPost;
+import com.clemble.casino.security.ClembleConsumerDetails;
+import com.clemble.casino.security.ClientDetails;
 import com.clemble.casino.server.event.game.SystemGameInitiationDueEvent;
 import com.clemble.casino.server.event.schedule.SystemAddJobScheduleEvent;
 import com.google.common.collect.ImmutableMap;
@@ -44,6 +46,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Ignore;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth.common.signature.RSAKeySecret;
 
 import com.clemble.casino.VersionAware;
@@ -335,6 +338,18 @@ public class IntegrationObjectTest {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        ObjectGenerator.register(ClembleConsumerDetails.class, new AbstractValueGenerator<ClembleConsumerDetails>() {
+            @Override
+            public ClembleConsumerDetails generate() {
+                return new ClembleConsumerDetails(
+                    "consumerKey",
+                    "consumer",
+                    rsaKey,
+                    Collections.<GrantedAuthority>emptyList(),
+                    new ClientDetails("consumer")
+                );
+            }
+        });
     }
 
 }
