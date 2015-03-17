@@ -103,11 +103,11 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating goal request
         GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(LOOSE_PUNISHMENT, "Test loose timeout", "UTC"));
-        AsyncUtils.checkNotNull((i) -> A.goalOperations().initiationService().get(AC.getGoalKey()));
+        AsyncUtils.checkNotNull(() -> A.goalOperations().initiationService().get(AC.getGoalKey()));
         A.goalOperations().initiationService().confirm(AC.getGoalKey());
         // Step 3. Checking AC
         Outcome expected = new PlayerLostOutcome(A.getPlayer());
-        boolean check = AsyncUtils.check((i) -> expected.equals(A.goalOperations().recordService().get(AC.getGoalKey()).getOutcome()));
+        boolean check = AsyncUtils.check(() -> expected.equals(A.goalOperations().recordService().get(AC.getGoalKey()).getOutcome()));
         Assert.assertTrue(check);
     }
 
@@ -117,18 +117,18 @@ public class GoalMoveTimeoutPunishmentProcessingTest {
         ClembleCasinoOperations A = playerScenarios.createPlayer();
         // Step 2. Creating goal request
         GoalConstruction AC = A.goalOperations().constructionService().construct(new GoalConstructionRequest(PENALTY_PUNISHMENT, "Test penalty timeout", "UTC"));
-        AsyncUtils.checkNotNull((i) -> A.goalOperations().initiationService().get(AC.getGoalKey()));
+        AsyncUtils.checkNotNull(() -> A.goalOperations().initiationService().get(AC.getGoalKey()));
         Bank originalBank = A.goalOperations().initiationService().get(AC.getGoalKey()).getBank();
         A.goalOperations().initiationService().confirm(AC.getGoalKey());
         // Step 3. Checking AC
-        boolean check = AsyncUtils.check((i) -> !originalBank.equals(A.goalOperations().actionService().getState(AC.getGoalKey()).getBank()));
+        boolean check = AsyncUtils.check(() -> !originalBank.equals(A.goalOperations().actionService().getState(AC.getGoalKey()).getBank()));
         Assert.assertTrue(check);
         // Step 4. Checking penalty due to move timeout
-        boolean checkPenalized = AsyncUtils.check((i) -> A.goalOperations().actionService().getState(AC.getGoalKey()).getBank().getPenalty().getAmount() != 0);
+        boolean checkPenalized = AsyncUtils.check(() -> A.goalOperations().actionService().getState(AC.getGoalKey()).getBank().getPenalty().getAmount() != 0);
         Assert.assertTrue(checkPenalized);
         // Step 5. Checking loosing after money expires
         Outcome expected = new PlayerLostOutcome(A.getPlayer());
-        boolean checkLoose = AsyncUtils.check((i) -> expected.equals(A.goalOperations().recordService().get(AC.getGoalKey()).getOutcome()));
+        boolean checkLoose = AsyncUtils.check(() -> expected.equals(A.goalOperations().recordService().get(AC.getGoalKey()).getOutcome()));
         Assert.assertTrue(checkLoose);
     }
 

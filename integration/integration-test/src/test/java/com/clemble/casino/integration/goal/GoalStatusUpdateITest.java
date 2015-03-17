@@ -46,11 +46,11 @@ public class GoalStatusUpdateITest {
         }, 30_000);
         final String newStatus = ObjectGenerator.generate(String.class);
         // Step 4. Checking goal started
-        boolean goalStarted = AsyncUtils.checkNotNull((i) -> A.goalOperations().actionService().getState(goalKey));
+        boolean goalStarted = AsyncUtils.checkNotNull(() -> A.goalOperations().actionService().getState(goalKey));
         Assert.assertTrue(goalStarted);
         A.goalOperations().actionService().process(goalKey, new GoalStatusUpdateAction(newStatus));
         // Step 5. Checking goal
-        boolean goalStatusUpdated = AsyncUtils.check((i) -> A.goalOperations().actionService().getState(goalKey).getStatus().equals(newStatus));
+        boolean goalStatusUpdated = AsyncUtils.check(() -> A.goalOperations().actionService().getState(goalKey).getStatus().equals(newStatus));
         Assert.assertTrue(goalStatusUpdated);
     }
 

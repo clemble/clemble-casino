@@ -38,11 +38,11 @@ public class PlayerTagITest {
         GoalConfiguration configuration = Agoal.configurationService().getConfigurations().get(0);
         GoalConstruction construction = Agoal.constructionService().construct(new GoalConstructionRequest(configuration, "#sport goal", "UTC"));
         // Step 4. Checking goal started
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> Agoal.actionService().getState(construction.getGoalKey())));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> Agoal.actionService().getState(construction.getGoalKey())));
         // Step 5. Sending goal reached event
         Agoal.actionService().process(construction.getGoalKey(), new GoalReachedAction("I'm done"));
         // Step 6. Checking tag added
-        Assert.assertTrue(AsyncUtils.check((i) -> {
+        Assert.assertTrue(AsyncUtils.check(() -> {
             Set<ClembleTag> tags = A.tagService().myTags();
             if (tags.isEmpty())
                 return false;

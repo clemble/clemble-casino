@@ -8,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import com.clemble.casino.integration.ClembleIntegrationTest;
 import com.clemble.casino.integration.game.RoundGamePlayer;
 import com.clemble.casino.integration.game.SelectNumberAction;
+import com.clemble.casino.integration.utils.AsyncUtils;
 import com.clemble.casino.money.MoneySource;
 import com.clemble.casino.payment.bonus.RegistrationBonusPaymentSource;
 import com.clemble.casino.payment.event.PaymentEvent;
@@ -95,7 +96,7 @@ public class PlayerAccountOperationsITest {
     }
 
     @Test
-    public void runningOutOfMoney() {
+    public void runningOutOfMoney() throws Exception {
         // TODO can fail, because cash transactions are asynchronous (Need to manage this)
         final ClembleCasinoOperations A = playerOperations.createPlayer();
         final ClembleCasinoOperations B = playerOperations.createPlayer();
@@ -137,20 +138,11 @@ public class PlayerAccountOperationsITest {
 
             final Money price = AvsB.getConfiguration().getPrice();
 
-            AsyncCompletionUtils.check(new Check() {
-                @Override
-                public boolean check() {
-                    Money Aexpected = cashAbefore.add(price.negate());
-                    Money Aactual = A.accountService().myAccount().getMoney(Currency.point);
-                    return Aexpected.equals(Aactual);
-                }
-            }, 30_000);
-            AsyncCompletionUtils.check(new Check(){
-                @Override
-                public boolean check() {
-                    return cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.point));
-                }
-            }, 30_000);
+            AsyncUtils.verifyEquals(
+                () -> cashAbefore.add(price.negate()),
+                () -> A.accountService().myAccount().getMoney(Currency.point)
+            );
+            AsyncUtils.verify(() -> cashBbefore.add(price).equals(B.accountService().myAccount().getMoney(Currency.point)));
         } while (true);
     }
 

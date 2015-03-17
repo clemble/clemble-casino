@@ -105,7 +105,7 @@ public class MatchGameConstructionITest {
         assertNotNull(transaction);
 
         // Processing is async, so payment might complete only after certain delay
-        boolean check = AsyncUtils.check((test) -> {
+        boolean check = AsyncUtils.check(() -> {
             Money mA = AvsB.playerOperations().accountService().myAccount().getMoney(Currency.point);
             Money mB = BvsA.playerOperations().accountService().myAccount().getMoney(Currency.point);
 

@@ -79,7 +79,7 @@ public class GoalSuggestionITest {
         // Step 4. Accepting suggestion
         B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), new GoalSuggestionResponse(configuration, true));
         // Step 5. Checking suggestion in the list of suggestions
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
         GoalSuggestion suggestion = CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications()).getSuggestion();
         Assert.assertEquals(GoalSuggestionState.accepted, suggestion.getState());
     }
@@ -100,7 +100,7 @@ public class GoalSuggestionITest {
         // Step 4. Accepting suggestion
         B.goalOperations().suggestionService().reply(suggestionAtoB.getGoalKey(), new GoalSuggestionResponse(configuration, false));
         // Step 5. Checking suggestion in the list of suggestions
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications())));
         GoalSuggestion suggestion = CollectionUtils.find(GoalSuggestionNotification.class, A.notificationService().myNotifications()).getSuggestion();
         Assert.assertEquals(GoalSuggestionState.declined, suggestion.getState());
     }

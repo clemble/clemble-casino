@@ -40,13 +40,13 @@ public class GoalVictoryITest {
         final GoalConstruction construction = A.goalOperations().constructionService().construct(goalRequest);
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking construction
-        AsyncUtils.verify((i) -> A.goalOperations().initiationService().get(goalKey).getState() == InitiationState.initiated);
+        AsyncUtils.verify(() -> A.goalOperations().initiationService().get(goalKey).getState() == InitiationState.initiated);
         // Step 4. Checking goal started
-        AsyncUtils.verify((i) -> A.goalOperations().actionService().getState(goalKey) != null);
+        AsyncUtils.verify(() -> A.goalOperations().actionService().getState(goalKey) != null);
         // Step 5. Performing simple action
         A.goalOperations().actionService().process(goalKey, new GoalReachedAction("Win bitch"));
         // Step 6. Waiting for goal to completes
-        AsyncUtils.verify((i) -> {
+        AsyncUtils.verify(() -> {
                 Collection<EventRecord> events = A.goalOperations().recordService().get(goalKey).getEventRecords();
                 for (EventRecord event : events) {
                     if (event.getEvent() instanceof GoalEndedEvent)
@@ -55,7 +55,7 @@ public class GoalVictoryITest {
                 return false;
             }
         );
-        AsyncUtils.verify((i) -> A.goalOperations().victoryService().listMy().size() == 1);
+        AsyncUtils.verify(() -> A.goalOperations().victoryService().listMy().size() == 1);
     }
 
 }

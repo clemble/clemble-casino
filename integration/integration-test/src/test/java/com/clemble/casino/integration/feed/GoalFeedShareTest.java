@@ -50,7 +50,7 @@ public class GoalFeedShareTest {
         // Step 3. Creating construction
         final GoalConstruction constructionA = goalA.constructionService().construct(new GoalConstructionRequest(configuration, "Goal A", "UTC"));
         // Step 4. Checking post appeared in player feed
-        Assert.assertTrue(AsyncUtils.check((i) -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
+        Assert.assertTrue(AsyncUtils.check(() -> B.feedService().myFeed().length == 1 && B.feedService().myFeed()[0] instanceof GoalStartedPost));
         // Step 5. Checking share works
         GoalStartedPost post = (GoalStartedPost) B.feedService().myFeed()[0];
         Assert.assertNotNull(post);

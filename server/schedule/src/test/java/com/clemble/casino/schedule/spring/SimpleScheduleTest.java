@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -60,7 +61,7 @@ public class SimpleScheduleTest {
     public SystemNotificationServiceListener notificationServiceListener;
 
     @Test
-    public void testSchedule() {
+    public void testSchedule() throws InterruptedException {
         // Step 0. Creating fake event listener
         final TestEventListener eventListener = new TestEventListener();
         // Step 0.1. Subscribing to event listener
@@ -80,7 +81,7 @@ public class SimpleScheduleTest {
             public Integer get() {
                 return 1;
             }
-        });
+        }, 10_000);
     }
 
 }

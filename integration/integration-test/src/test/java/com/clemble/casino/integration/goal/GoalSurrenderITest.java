@@ -40,7 +40,7 @@ public class GoalSurrenderITest {
         final GoalConfiguration Aconf = AgoalOps.configurationService().getConfigurations().get(0);
         final GoalConstruction AgoalConst = AgoalOps.constructionService().construct(new GoalConstructionRequest(Aconf, "A conf", "UTC"));
         final String goalKey = AgoalConst.getGoalKey();
-        AsyncUtils.check((i) -> AgoalOps.actionService().getState(goalKey) != null);
+        AsyncUtils.check(() -> AgoalOps.actionService().getState(goalKey) != null);
         EventAccumulator<PaymentCompleteEvent> paymentAccumulator = new EventAccumulator<PaymentCompleteEvent>();
         A.listenerOperations().subscribe(new EventTypeSelector(PaymentCompleteEvent.class), paymentAccumulator);
         // Step 3. Checking value before give up

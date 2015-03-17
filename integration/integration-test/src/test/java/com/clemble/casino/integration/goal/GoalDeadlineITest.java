@@ -36,11 +36,11 @@ public class GoalDeadlineITest {
         final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", "UTC"));
         final String goalKey = construction.getGoalKey();
         // Step 2.1. Checking goal initiated
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> gA.initiationService().get(goalKey)));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> gA.initiationService().get(goalKey)));
         // Step 2.2. Confirming initiation to trigger goal
         GoalInitiation initiation = gA.initiationService().confirm(construction.getGoalKey());
         // Step 3. Checking goal has deadline in timeout
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> gA.actionService().getState(goalKey)));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> gA.actionService().getState(goalKey)));
         // Step 3.1. Extracting deadline
         long deadline = gA.actionService().getState(goalKey).getContext().getPlayerContext(A.getPlayer()).getClock().getDeadline().getMillis();
         Assert.assertNotEquals(deadline, 0L);
@@ -56,7 +56,7 @@ public class GoalDeadlineITest {
         final GoalConstruction construction = gA.constructionService().construct(new GoalConstructionRequest(configuration, "Test deadline", "UTC"));
         final String goalKey = construction.getGoalKey();
         // Step 3. Checking goal has deadline in timeout
-        Assert.assertTrue(AsyncUtils.checkNotNull((i) -> gA.actionService().getState(goalKey)));
+        Assert.assertTrue(AsyncUtils.checkNotNull(() -> gA.actionService().getState(goalKey)));
         // Step 3.1. Extracting deadline
         long clockDeadline = gA.actionService().getState(goalKey).getContext().getPlayerContext(A.getPlayer()).getClock().getDeadline().getMillis();
         long goalDeadline = gA.actionService().getState(goalKey).getDeadline().getMillis();
