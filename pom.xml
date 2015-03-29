@@ -6,7 +6,6 @@
     <version>0.16.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>public</module>
         <module>server</module>
         <module>integration</module>
     </modules>
@@ -102,6 +101,19 @@
         <facebook.test.version>1.1.5</facebook.test.version>
     </properties>
     <repositories>
+        <repository>
+            <id>aws-release</id>
+            <name>AWS Release Repository</name>
+            <url>s3://clemble/release</url>
+        </repository>
+        <repository>
+            <id>aws-snapshot</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://clemble/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>neo4j-releases</id>
             <url>http://m2.neo4j.org/content/repositories/releases</url>
@@ -1018,6 +1030,13 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>5.0.0.RELEASE</version>
+            </extension>
+        </extensions>
     </build>
 
 </project>
