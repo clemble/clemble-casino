@@ -47,7 +47,6 @@ public class ScheduleSpringConfiguration implements SpringConfiguration {
 
     @Bean
     public SystemRemoveJobScheduleEventListener scheduleRemoveJobListener(
-        ObjectMapper objectMapper,
         Scheduler scheduler,
         SystemNotificationServiceListener notificationServiceListener) {
         SystemRemoveJobScheduleEventListener systemRemoveJobScheduleEventListener = new SystemRemoveJobScheduleEventListener(scheduler);
