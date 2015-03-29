@@ -10,9 +10,6 @@
     <artifactId>server</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>common</module>
-        <module>common-web</module>
-
         <module>payment</module>
         <module>player</module>
         <module>goal</module>

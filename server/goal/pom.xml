@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-web</artifactId>
         </dependency>
     </dependencies>
 </project>

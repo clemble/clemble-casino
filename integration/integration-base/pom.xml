@@ -100,7 +100,7 @@
 
         <dependency>
             <groupId>com.clemble.casino.server</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>common-web</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
