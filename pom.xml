@@ -102,19 +102,6 @@
     </properties>
     <repositories>
         <repository>
-            <id>aws-release</id>
-            <name>AWS Release Repository</name>
-            <url>s3://clemble/release</url>
-        </repository>
-        <repository>
-            <id>aws-snapshot</id>
-            <name>AWS Snapshot Repository</name>
-            <url>s3://clemble/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <id>neo4j-releases</id>
             <url>http://m2.neo4j.org/content/repositories/releases</url>
         </repository>
@@ -148,6 +135,19 @@
             <id>mavarazy-github</id>
             <name>Spring Maven SNAPSHOT Repository</name>
             <url>http://mavarazy.github.io/maven/releases</url>
+        </repository>
+        <repository>
+            <id>aws-release</id>
+            <name>AWS Release Repository</name>
+            <url>s3://clemble/release</url>
+        </repository>
+        <repository>
+            <id>aws-snapshot</id>
+            <name>AWS Snapshot Repository</name>
+            <url>s3://clemble/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>clojars.org</id>
